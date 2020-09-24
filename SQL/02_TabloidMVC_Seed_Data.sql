@@ -33,3 +33,9 @@ VALUES (
 'There are those' + char(10) + 'who do not believe' + char(10) + 'C# is the best.' + char(10) + 'They are wrong.',
     'https://gizmodiva.com/wp-content/uploads/2017/10/SCOTT-A-WOODWARD_1SW1943-1170x689.jpg',SYSDATETIME(), SYSDATETIME(), 1, 1, 1);
 SET IDENTITY_INSERT [Post] OFF
+
+SET IDENTITY_INSERT [Comment] ON
+INSERT INTO [Comment] 
+	([Id], [PostId], [UserProfileId], [Subject], [Content], [CreateDateTime])
+VALUES (1, 1, 1, 'Feedback', 'Any feedback or comments are welcomed!', SYSDATETIME());
+SET IDENTITY_INSERT [Comment] OFF
