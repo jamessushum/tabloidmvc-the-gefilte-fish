@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -43,24 +44,30 @@ namespace TabloidMVC.Controllers
             return View();
         }
 
-        // GET: Comment/Create
+        // GET: Comment/Create/1
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Comment/Create
+        // POST: Comment/Create/1
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(int Id, Comment comment)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                comment.PostId = Id;
+                comment.UserProfileId = GetCurrentUserProfileId();
+                comment.CreateDateTime = DateTime.Now;
+
+                _commentRepository.AddComment(comment);
+
+                return RedirectToAction("Index", new { id = Id });
             }
-            catch
+            catch(Exception ex)
             {
-                return View();
+                return View(comment);
             }
         }
 
@@ -104,6 +111,12 @@ namespace TabloidMVC.Controllers
             {
                 return View();
             }
+        }
+
+        private int GetCurrentUserProfileId()
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(id);
         }
     }
 }
