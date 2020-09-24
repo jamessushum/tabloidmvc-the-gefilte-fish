@@ -18,14 +18,12 @@ namespace TabloidMVC.Models
         [MaxLength(255, ErrorMessage = "Your tag can't be longer than 50 characters."), MinLength(5, ErrorMessage = "Can't be empty.")]
         public string Content { get; set; }
 
-        [Required(ErrorMessage = "Please Enter an Image Location.")]
         [DisplayName("Header Image URL")]
         public string ImageLocation { get; set; }
 
         public DateTime CreateDateTime { get; set; }
 
         [DisplayName("Published")]
-        [Required(ErrorMessage = "Please Enter a Date.")]
         [DataType(DataType.Date)]
         public DateTime? PublishDateTime { get; set; }
 
