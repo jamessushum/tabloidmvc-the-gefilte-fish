@@ -14,7 +14,7 @@ namespace TabloidMVC.Repositories
         public CommentRepository(IConfiguration config) : base(config) { }
 
         // Method to get all comments from specified post 
-        public List<Comment> GetAllComments(int postId)
+        public List<Comment> GetCommentsByPost(int postId)
         {
             using (SqlConnection conn = Connection)
             {
