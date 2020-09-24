@@ -11,15 +11,15 @@ namespace TabloidMVC.Controllers
 {
     public class TagController : Controller
     {
-        private readonly ITagRepository _tagRepository;
+        private readonly ITagRepository _tagRepo;
         public TagController(ITagRepository tagRepository)
         {
-            _tagRepository = tagRepository;
+            _tagRepo = tagRepository;
         }
         // GET: TagController
         public ActionResult Index()
         {
-            List<Tag> tags = _tagRepository.GetAllTags();
+            List<Tag> tags = _tagRepo.GetAllTags();
 
             return View(tags);
         }
@@ -39,15 +39,17 @@ namespace TabloidMVC.Controllers
         // POST: TagController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Tag tag)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _tagRepo.Add(tag);
+
+                return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                return View(tag);
             }
         }
 
