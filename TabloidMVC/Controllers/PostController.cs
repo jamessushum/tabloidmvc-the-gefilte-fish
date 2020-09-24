@@ -31,7 +31,7 @@ namespace TabloidMVC.Controllers
 
         public IActionResult Details(int id)
         {
-            var post = _postRepository.GetsPostById(id);
+            var post = _postRepository.GetPostById(id);
             if (post == null)
             {
                 int userId = GetCurrentUserProfileId();
