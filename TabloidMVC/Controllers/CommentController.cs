@@ -43,13 +43,13 @@ namespace TabloidMVC.Controllers
             return View();
         }
 
-        // GET: CommentController/Create
+        // GET: Comment/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: CommentController/Create
+        // POST: Comment/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
