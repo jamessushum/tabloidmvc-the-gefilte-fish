@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using TabloidMVC.Models;
 using TabloidMVC.Repositories;
 
@@ -76,21 +77,35 @@ namespace TabloidMVC.Controllers
         // GET: CategoryController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            Category category = _categoryRepository.GetCategoryById(id);
+            return View(category);
         }
 
         // POST: CategoryController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, Category category)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                if (id != 14)
+                {
+                    _categoryRepository.Delete(id);
+                }
+                else
+                {
+                    throw new ArgumentException("'Other' cannot be deleted.", "id");
+                }
+                return RedirectToAction("Index");
             }
-            catch
+            catch (ArgumentException ex)
             {
-                return View();
+                Console.WriteLine(ex);
+                return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+                return View(category);
             }
         }
     }
