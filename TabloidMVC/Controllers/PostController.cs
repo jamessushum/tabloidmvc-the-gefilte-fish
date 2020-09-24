@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic;
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
@@ -98,23 +99,33 @@ namespace TabloidMVC.Controllers
         }
         public IActionResult Edit(int id)
         {
-            Post post = _postRepository.GetPublishedPostById(id);
-
-            return View(post);
+            PostCreateViewModel vm = new PostCreateViewModel()
+            {
+                Post = _postRepository.GetPublishedPostById(id),
+                CategoryOptions = _categoryRepository.GetAll()
+            };
+            
+            return View(vm);
         }
 
         [HttpPost]
         public IActionResult Edit(int id, Post post)
         {
+            Console.WriteLine("Hitting Edit P2");
+            post.Print();
+            PostCreateViewModel vm = new PostCreateViewModel()
+            {
+                Post = _postRepository.GetPublishedPostById(id),
+                CategoryOptions = _categoryRepository.GetAll()
+            };
             try
             {
-                
                 _postRepository.EditPost(post);
                 return RedirectToAction("Index");
             }
             catch(Exception ex)
             {
-                return View(post);
+                return View(vm);
             }
         }
     }

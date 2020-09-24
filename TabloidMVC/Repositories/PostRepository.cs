@@ -218,25 +218,30 @@ namespace TabloidMVC.Repositories
                 conn.Open();
                 using(SqlCommand cmd = conn.CreateCommand())
                 {
-                    Console.WriteLine(post.Category);
+                    Console.WriteLine("SQL STATMENT RUNNING");
                     cmd.CommandText = @"UPDATE Post
                                         SET
                                         Title = @title,
                                         Content = @content,
                                         ImageLocation = @imageLocation,
-                                        IsApproved = @isApproved
+                                        IsApproved = @isApproved,
+                                        PublishDateTime = @publishDateTime,
+                                        CategoryId = @catId
                                         WHERE Id = @id";
                     cmd.Parameters.AddWithValue("@title", post.Title);
                     cmd.Parameters.AddWithValue("@content", post.Content);
                     cmd.Parameters.AddWithValue("@imageLocation", post.ImageLocation);
-                    cmd.Parameters.AddWithValue("@isApproved", post.IsApproved);
+                    cmd.Parameters.AddWithValue("@isApproved", true);
+                    cmd.Parameters.AddWithValue("@catId", post.CategoryId);
                     cmd.Parameters.AddWithValue("@id", post.Id);
+                    cmd.Parameters.AddWithValue("@publishDateTime", post.PublishDateTime);
                     try
                     {
                      cmd.ExecuteNonQuery();
                     }
                     catch(Exception ex)
                     {
+                        Console.WriteLine("Error in EditPost");
                         Console.WriteLine(ex.Message);
                     }
                     
@@ -246,5 +251,6 @@ namespace TabloidMVC.Repositories
             }
 
         }
+        
     }
 }
