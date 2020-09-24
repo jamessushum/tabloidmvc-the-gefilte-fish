@@ -20,17 +20,12 @@ namespace TabloidMVC.Repositories
                 {
 
                     // Sql command
-                    cmd.CommandText = @"
-                        INSERT INTO Tag
-                        [Name]
-                        OUTPUT INSERTED.ID
-                        VALUES (@name);
-                    ";
+                    cmd.CommandText = @"INSERT INTO Tag (Name) VALUES (@name);";
 
                     //declaring Sql variable
                     cmd.Parameters.AddWithValue("@name", tag.Name);
 
-                    tag.Id = (int)cmd.ExecuteScalar();
+                    cmd.ExecuteNonQuery();
 
                 }
             }
