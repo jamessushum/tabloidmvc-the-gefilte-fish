@@ -20,28 +20,50 @@ namespace TabloidMVC.Repositories
                 {
 
                     // Sql command
-                    cmd.CommandText = @"
-                        INSERT INTO Tag
-                        [Name]
-                        OUTPUT INSERTED.ID
-                        VALUES (@name);
-                    ";
+                    cmd.CommandText = @"INSERT INTO Tag (Name) VALUES (@name);";
 
                     //declaring Sql variable
                     cmd.Parameters.AddWithValue("@name", tag.Name);
 
-                    tag.Id = (int)cmd.ExecuteScalar();
+                    cmd.ExecuteNonQuery();
 
                 }
             }
         }
         public void Update(Tag tag)
         {
-            
-        }
-        public void Delete(Tag tag)
-        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        UPDATE Tag
+                        SET Name = @name
+                        WHERE Id = @id";
 
+                    cmd.Parameters.AddWithValue("@id", tag.Id);
+                    cmd.Parameters.AddWithValue("@name", tag.Name);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+        public void Delete(int tagId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        DELETE FROM Tag
+                        WHERE Id = @id";
+
+                    cmd.Parameters.AddWithValue("@id", tagId);
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
         public List<Tag> GetAllTags()
         {
@@ -76,6 +98,43 @@ namespace TabloidMVC.Repositories
                     reader.Close();
 
                     return tags;
+                }
+            }
+        }
+        public Tag GetTagById(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT 
+                            Id,
+                            Name
+                        FROM Tag
+                        WHERE Id = @id";
+
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    if(reader.Read())
+                    {
+                        
+                        Tag tag = new Tag
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Name = reader.GetString(reader.GetOrdinal("Name"))
+                        };
+
+                        reader.Close();
+                        return tag;
+                    }
+
+                    reader.Close();
+                    return null;
+
                 }
             }
         }
