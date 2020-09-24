@@ -9,18 +9,23 @@ namespace TabloidMVC.Models
     {
         public int Id { get; set; }
 
-        [Required]
+    
+        [Required(ErrorMessage = "Please Enter a Title name.")]
+        [MaxLength(50, ErrorMessage = "Your tag can't be longer than 50 characters."), MinLength(1, ErrorMessage = "Can't be empty.")]
         public string Title { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please Enter a Content.")]
+        [MaxLength(255, ErrorMessage = "Your tag can't be longer than 50 characters."), MinLength(5, ErrorMessage = "Can't be empty.")]
         public string Content { get; set; }
 
+        [Required(ErrorMessage = "Please Enter an Image Location.")]
         [DisplayName("Header Image URL")]
         public string ImageLocation { get; set; }
 
         public DateTime CreateDateTime { get; set; }
 
         [DisplayName("Published")]
+        [Required(ErrorMessage = "Please Enter a Date.")]
         [DataType(DataType.Date)]
         public DateTime? PublishDateTime { get; set; }
 
