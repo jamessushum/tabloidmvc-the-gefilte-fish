@@ -3,9 +3,8 @@ using TabloidMVC.Models;
 
 namespace TabloidMVC.Repositories
 {
-    public interface ICategoryRepository
+    public interface ICommentRepository
     {
-        List<Category> GetAll();
-        void Add(Category category);
+        List<Comment> GetCommentsByPost(int postId);
     }
 }

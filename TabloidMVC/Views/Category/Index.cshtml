@@ -1,20 +1,19 @@
-﻿@model IEnumerable<TabloidMVC.Models.Tag>
+﻿@model IEnumerable<TabloidMVC.Models.Category>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-
 <div class="container pt-5">
-    <h1>Tags</h1>
+
+    <h1>Categories</h1>
 
     <p>
-        <a class="btn btn-primary" asp-action="Create">Create Tag</a>
+        <a class="btn btn-primary" asp-action="Create">New Category</a>
     </p>
     <table class="table table-striped">
         <thead>
             <tr>
-
                 <th>
                     @Html.DisplayNameFor(model => model.Name)
                 </th>
@@ -25,11 +24,10 @@
             @foreach (var item in Model)
             {
                 <tr>
-
                     <td>
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
-                    <td class="align-items-end">
+                    <td>
                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1 float-right" title="Edit">
                             <i class="fas fa-pencil-alt"></i>
                         </a>
