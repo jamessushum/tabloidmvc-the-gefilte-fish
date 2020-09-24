@@ -15,10 +15,12 @@ namespace TabloidMVC.Controllers
     public class CategoryController : Controller
     {
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IPostRepository _postRepository;
 
-        public CategoryController(ICategoryRepository categoryRepository)
+        public CategoryController(ICategoryRepository categoryRepository, IPostRepository postRepository)
         {
             _categoryRepository = categoryRepository;
+            _postRepository = postRepository;
         }
 
         // GET: CategoryController
@@ -77,8 +79,18 @@ namespace TabloidMVC.Controllers
         // GET: CategoryController/Delete/5
         public ActionResult Delete(int id)
         {
-            Category category = _categoryRepository.GetCategoryById(id);
-            return View(category);
+            try
+            {
+                if (id == 14) throw new ArgumentException("'Other' cannot be deleted.", "id");
+
+                Category category = _categoryRepository.GetCategoryById(id);
+                return View(category);
+            }
+            catch (ArgumentException)
+            {
+                return RedirectToAction("OtherError");
+            }
+
         }
 
         // POST: CategoryController/Delete/5
@@ -90,6 +102,12 @@ namespace TabloidMVC.Controllers
             {
                 if (id != 14)
                 {
+                    // Update posts that are linked to the category to be deleted
+                    List<Post> postsToUpdate = _postRepository.GetPostsByCategory(id);
+                    foreach (Post post in postsToUpdate)
+                    {
+                        post.CategoryId = 14;
+                    }
                     _categoryRepository.Delete(id);
                 }
                 else
@@ -98,15 +116,15 @@ namespace TabloidMVC.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            catch (ArgumentException ex)
-            {
-                Console.WriteLine(ex);
-                return RedirectToAction("Index");
-            }
             catch (Exception)
             {
                 return View(category);
             }
+        }
+
+        public ActionResult OtherError()
+        {
+            return View();
         }
     }
 }
