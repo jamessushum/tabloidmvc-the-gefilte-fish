@@ -73,6 +73,32 @@ namespace TabloidMVC.Repositories
             }
         }
 
+        // Method to add new comment
+        public void AddComment(Comment comment)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO Comment
+	                                        (PostId, UserProfileId, Subject, Content, CreateDateTime)
+                                        OUTPUT INSERTED.Id
+                                        VALUES
+	                                        (@PostId, @UserProfileId, @Subject, @Content, @CreateDateTime)";
+
+                    cmd.Parameters.AddWithValue("@PostId", comment.PostId);
+                    cmd.Parameters.AddWithValue("@UserProfileId", comment.UserProfileId);
+                    cmd.Parameters.AddWithValue("@Subject", comment.Subject);
+                    cmd.Parameters.AddWithValue("@Content", comment.Content);
+                    cmd.Parameters.AddWithValue("@CreateDateTime", comment.CreateDateTime);
+
+                    comment.Id = (int)cmd.ExecuteScalar();
+                }
+            }
+        }
+
         // Method creates new Comment object with corresponding properties extracting data from reader
         private Comment NewCommentFromReader(SqlDataReader reader)
         {
