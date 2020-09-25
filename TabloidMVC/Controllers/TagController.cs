@@ -133,9 +133,24 @@ namespace TabloidMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AddTagsToPost (int id, AddTagPostViewModel vm)
         {
-            List<Tag> tags = _tagRepo.GetAllTags();
+            try
+            {
+                if (vm.SelectedTagIds != null)
+                {
+                    foreach (int tagId in vm.SelectedTagIds)
+                    {
+                        _tagRepo.AddTagToPost(tagId, id);
+                    }
+                }
 
-            return View();
+                string idStr = "/" + id.ToString();
+                
+                return RedirectToAction("Details", "Post", idStr);
+            }
+            catch (Exception)
+            {
+                return View("index");
+            }
         }
     }
 }
