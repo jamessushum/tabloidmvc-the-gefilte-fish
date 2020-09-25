@@ -24,13 +24,7 @@
                 </div>
 
             }
-        <select>
-            <option value=""> Please select one or more options</option>
-            @foreach (Tag tag in Model.Tags)
-            {
-                <option value="@tag.Id" multiselect>@tag.Name</option>
-            }
-        </select>
+
 
         </div>
     </form>
