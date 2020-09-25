@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -8,10 +9,13 @@ namespace TabloidMVC.Models
     {
         public int Id { get; set; }
 
-        [Required]
+    
+        [Required(ErrorMessage = "Please Enter a Title name.")]
+        [MaxLength(50, ErrorMessage = "Your tag can't be longer than 50 characters."), MinLength(1, ErrorMessage = "Can't be empty.")]
         public string Title { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please Enter a Content.")]
+        [MaxLength(255, ErrorMessage = "Your tag can't be longer than 50 characters."), MinLength(5, ErrorMessage = "Can't be empty.")]
         public string Content { get; set; }
 
         [DisplayName("Header Image URL")]
@@ -33,5 +37,14 @@ namespace TabloidMVC.Models
         [DisplayName("Author")]
         public int UserProfileId { get; set; }
         public UserProfile UserProfile { get; set; }
+        public void Print()
+        {
+            Console.WriteLine($" Title: {Title}");
+            Console.WriteLine($" ID: {Id}");
+            Console.WriteLine($" Content: {Content}");
+            Console.WriteLine($" CategoryId: {CategoryId}");
+            Console.WriteLine($" ImageLocation: {ImageLocation}");
+        }
+        
     }
 }
