@@ -117,11 +117,11 @@ namespace TabloidMVC.Controllers
         }
 
         //GET: TagController
-        public ActionResult AddTagsToPost (int postId)
+        public ActionResult AddTagsToPost (int Id)
         {
             AddTagPostViewModel vm = new AddTagPostViewModel
             {
-                Post = _postRepo.GetPublishedPostById(postId),
+                Post = _postRepo.GetPublishedPostById(Id),
                 Tags = _tagRepo.GetAllTags()
             };
 
