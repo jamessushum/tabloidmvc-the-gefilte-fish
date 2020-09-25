@@ -176,6 +176,37 @@ namespace TabloidMVC.Repositories
             }
         }
 
+        // Method updates existing comment in database
+        public void UpdateComment(Comment comment)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"UPDATE Comment
+                                        SET
+	                                        PostId = @PostId,
+	                                        UserProfileId = @UserProfileId,
+	                                        Subject = @Subject,
+	                                        Content = @Content,
+	                                        CreateDateTime = @CreateDateTime
+                                        WHERE
+	                                        Id = @Id";
+
+                    cmd.Parameters.AddWithValue("@PostId", comment.PostId);
+                    cmd.Parameters.AddWithValue("@UserProfileId", comment.UserProfileId);
+                    cmd.Parameters.AddWithValue("@Subject", comment.Subject);
+                    cmd.Parameters.AddWithValue("@Content", comment.Content);
+                    cmd.Parameters.AddWithValue("@CreateDateTime", comment.CreateDateTime);
+                    cmd.Parameters.AddWithValue("@Id", comment.Id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         // Method creates new Comment object with corresponding properties extracting data from reader
         private Comment NewCommentFromReader(SqlDataReader reader)
         {
