@@ -4,49 +4,49 @@
     ViewData["Title"] = $"Post - {Model.Post.Title}";
 }
 
-<div class="container pt-5">
-    <div class="post">
-        <section class="px-3">
-            <div class="row justify-content-between">
-                <h1 class="text-secondary">@Model.Post.Title</h1>
-                <h1 class="text-black-50">@Model.Post.Category.Name</h1>
-            </div>
-            <div class="row justify-content-between">
-                <p class="text-secondary">Written by @Model.Post.UserProfile.DisplayName</p>
-                <p class="text-black-50">Published on @Html.DisplayFor(model => model.Post.PublishDateTime)</p>
-            </div>
-            <div class="row justify-content-start">
-                @{ string minuteForm = Model.ReadTime == 1 ? "minute" : "minutes"; }
-                <p class="text-secondary">Estimated read time: @Model.ReadTime @minuteForm</p>
-            </div>
-            <div class="row">
-                <a asp-action="Edit" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="Edit">
-                    <i class="fas fa-pencil-alt"></i>
-                </a>
-                <a asp-action="Delete" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="Delete">
-                    <i class="fas fa-trash"></i>
-                </a>
-            </div>
-        </section>
-        <hr />
-        @if (!string.IsNullOrWhiteSpace(Model.Post.ImageLocation))
-        {
-            <section class="row justify-content-center">
-                <div>
-                    <img src="@Model.Post.ImageLocation" />
+    <div class="container pt-5">
+        <a href="##" class="btn-dark btn ml-0 mb-3 " onClick="history.go(-1); return false;">Go back</a>
+        <div class="post">
+            <section class="px-3">
+
+                <div class="row justify-content-between">
+                    <h1 class="text-secondary">@Model.Post.Title</h1>
+                    <h1 class="text-black-50">@Model.Post.Category.Name</h1>
+                </div>
+                <div class="row justify-content-between">
+                    <p class="text-secondary">Written by @Model.Post.UserProfile.DisplayName</p>
+                    <p class="text-black-50">Published on @Html.DisplayFor(model => model.Post.PublishDateTime)</p>
+                </div>
+                <div class="row justify-content-start">
+                    @{ string minuteForm = Model.ReadTime == 1 ? "minute" : "minutes"; }
+                    <p class="text-secondary">Estimated read time: @Model.ReadTime @minuteForm</p>
+                </div>
+                <div class="row">
+
                 </div>
             </section>
-        }
-        <section class="row post__content">
-            <p class="col-sm-12 mt-5">@Html.DisplayFor(model => model.Post.Content)</p>
-        </section>
-        <div class="row">
-            <div class="m-1">
-                <a class="btn btn-primary" asp-controller="Comment" asp-action="Index" asp-route-id="@Model.Post.Id">View Comments</a>
-            </div>
-            <div class="m-1">
-                <a class="btn btn-primary" asp-controller="Comment" asp-action="Create" asp-route-id="@Model.Post.Id">Add Comment</a>
+            <hr />
+            @if (!string.IsNullOrWhiteSpace(Model.Post.ImageLocation))
+            {
+                <section class="row justify-content-center">
+                    <div>
+                        <img src="@Model.Post.ImageLocation" />
+                    </div>
+                </section>
+            }
+            <section class="row post__content">
+                <p class="col-sm-12 mt-5">@Html.DisplayFor(model => model.Post.Content)</p>
+            </section>
+            <div class="row">
+                <div class="m-1">
+                    <a class="btn btn-primary" asp-controller="Comment" asp-action="Index" asp-route-id="@Model.Post.Id">View Comments</a>
+                </div>
+                <div class="m-1">
+                    <a class="btn btn-primary" asp-controller="Comment" asp-action="Create" asp-route-id="@Model.Post.Id">Add Comment</a>
+                </div>
+
+
+
             </div>
         </div>
     </div>
-</div>
