@@ -42,7 +42,7 @@ namespace TabloidMVC.Controllers
             PostDetailView pdv = new PostDetailView()
             {
                 Post = post,
-                ReadTime = WordCount % 365 == 0 ? WordCount / 365 : WordCount / 365 + 1
+                ReadTime = WordCount % 265 == 0 ? WordCount / 265 : WordCount / 265 + 1
             };
             
             return View(pdv);
