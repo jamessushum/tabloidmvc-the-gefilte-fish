@@ -8,5 +8,7 @@ namespace TabloidMVC.Repositories
         List<UserProfile> GetAll();
 
         UserProfile GetByEmail(string email);
+        void Update(UserProfile userProfile);
+
     }
 }
