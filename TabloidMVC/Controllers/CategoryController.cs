@@ -106,7 +106,9 @@ namespace TabloidMVC.Controllers
                     List<Post> postsToUpdate = _postRepository.GetPostsByCategory(id);
                     foreach (Post post in postsToUpdate)
                     {
+                        // ID 14 = "Other"
                         post.CategoryId = 14;
+                        _postRepository.Edit(post);
                     }
                     _categoryRepository.Delete(id);
                 }
