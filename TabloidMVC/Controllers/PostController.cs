@@ -4,7 +4,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
@@ -34,9 +36,17 @@ namespace TabloidMVC.Controllers
         {
             var post = _postRepository.GetPostById(id);
             
-                if (post == null)return NotFound();
+            if (post == null)return NotFound();
+
+            int WordCount = post.Content.Split(" ").Length;
+
+            PostDetailView pdv = new PostDetailView()
+            {
+                Post = post,
+                ReadTime = WordCount % 265 == 0 ? WordCount / 265 : WordCount / 265 + 1
+            };
             
-            return View(post);
+            return View(pdv);
         }
 
         public IActionResult Create()

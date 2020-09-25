@@ -1,3 +1,4 @@
+
 USE [master]
 
 IF db_id('TabloidMVC') IS NULl
