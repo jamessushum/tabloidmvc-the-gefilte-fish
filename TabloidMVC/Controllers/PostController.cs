@@ -104,8 +104,7 @@ namespace TabloidMVC.Controllers
         }
         public IActionResult Edit(int id)
         {
-            HttpGetAttribute http = new HttpGetAttribute();
-            Console.WriteLine(http.Name);
+        
             PostCreateViewModel vm = new PostCreateViewModel()
             {
                 Post = _postRepository.GetPostById(id),

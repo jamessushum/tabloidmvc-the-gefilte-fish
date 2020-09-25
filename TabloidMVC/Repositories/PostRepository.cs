@@ -33,7 +33,8 @@ namespace TabloidMVC.Repositories
                               LEFT JOIN Category c ON p.CategoryId = c.id
                               LEFT JOIN UserProfile u ON p.UserProfileId = u.id
                               LEFT JOIN UserType ut ON u.UserTypeId = ut.id
-                        WHERE IsApproved = 1 AND PublishDateTime < SYSDATETIME()";
+                        WHERE IsApproved = 1 AND PublishDateTime < SYSDATETIME()
+                        ORDER BY PublishDateTime DESC";
                     var reader = cmd.ExecuteReader();
 
                     var posts = new List<Post>();
@@ -70,7 +71,7 @@ namespace TabloidMVC.Repositories
                               LEFT JOIN Category c ON p.CategoryId = c.id
                               LEFT JOIN UserProfile u ON p.UserProfileId = u.id
                               LEFT JOIN UserType ut ON u.UserTypeId = ut.id
-                        WHERE IsApproved = 1 AND p.id = @id";
+                        WHERE p.id = @id";
 
                     cmd.Parameters.AddWithValue("@id", id);
                     var reader = cmd.ExecuteReader();
@@ -179,7 +180,7 @@ namespace TabloidMVC.Repositories
                               LEFT JOIN Category c ON p.CategoryId = c.id
                               LEFT JOIN UserProfile u ON p.UserProfileId = u.id
                               LEFT JOIN UserType ut ON u.UserTypeId = ut.id
-                        WHERE IsApproved = 1 AND PublishDateTime < SYSDATETIME()
+                        WHERE PublishDateTime < SYSDATETIME()
                               AND p.id = @id";
 
                     cmd.Parameters.AddWithValue("@id", id);
@@ -383,7 +384,7 @@ namespace TabloidMVC.Repositories
                     cmd.Parameters.AddWithValue("@title", post.Title);
                     cmd.Parameters.AddWithValue("@content", post.Content);
                     cmd.Parameters.AddWithValue("@ImageLocation", DbUtils.ValueOrDBNull(post.ImageLocation));
-                    cmd.Parameters.AddWithValue("@isApproved", true);
+                    cmd.Parameters.AddWithValue("@isApproved", post.IsApproved);
                     cmd.Parameters.AddWithValue("@catId", post.CategoryId);
                     cmd.Parameters.AddWithValue("@id", post.Id);
                     cmd.Parameters.AddWithValue("@PublishDateTime", DbUtils.ValueOrDBNull(post.PublishDateTime));

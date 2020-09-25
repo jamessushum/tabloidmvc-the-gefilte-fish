@@ -50,8 +50,8 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Content)
+            <td class="overflow-auto h-25">
+                @Html.DisplayFor(modelItem => item.Content, new { @class = "required", style = "height:400px;width:100%;color:red; overflow: auto;" })
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ImageLocation)
