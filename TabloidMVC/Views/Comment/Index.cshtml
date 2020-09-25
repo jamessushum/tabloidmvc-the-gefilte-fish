@@ -19,13 +19,27 @@
         <section class="col">
             @foreach (Comment comment in Model.Comments)
             {
-                <div class="card m-2">
-                    <div class="card-body">
-                        <p class="card-text"><small class="text-muted"><i class="fas fa-user"></i> &nbsp; @comment.UserProfile.FullName &nbsp; <i class="far fa-clock"></i> &nbsp; @comment.CreateDateTime</small></p>
-                        <h5 class="card-title text-secondary">@comment.Subject</h5>
-                        <p class="card-text">@comment.Content</p>
+            <div class="card m-2">
+                <div class="card-body">
+                    <p class="card-text"><small class="text-muted"><i class="fas fa-user"></i> &nbsp; @comment.UserProfile.FullName &nbsp; <i class="far fa-clock"></i> &nbsp; @comment.CreateDateTime</small></p>
+                    <h5 class="card-title text-secondary">@comment.Subject</h5>
+                    <p class="card-text">@comment.Content</p>
+                    <div class="row justify-content-end m-0">
+                        @if (comment.UserProfileId == Model.CurrentUserProfileId)
+                        {
+                            <a asp-action="Delete" asp-route-id="@comment.Id" class="btn btn-outline-primary mx-1" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        }
+                        @if (comment.UserProfileId == Model.CurrentUserProfileId)
+                        {
+                            <a asp-action="Edit" asp-route-id="@comment.Id" class="btn btn-outline-primary mx-1" title="Edit">
+                                <i class="fas fa-pencil-alt"></i>
+                            </a>
+                        }
                     </div>
                 </div>
+            </div>
             }
         </section>
         <br />
