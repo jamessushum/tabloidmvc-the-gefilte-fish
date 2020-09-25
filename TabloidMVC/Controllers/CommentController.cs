@@ -39,10 +39,12 @@ namespace TabloidMVC.Controllers
             return View(vm);
         }
 
-        // GET: CommentController/Details/5
+        // GET: Comment/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            Comment comment = _commentRepository.GetCommentById(id);
+
+            return View(comment);
         }
 
         // GET: Comment/Create/1
@@ -72,31 +74,49 @@ namespace TabloidMVC.Controllers
             }
         }
 
-        // GET: CommentController/Edit/5
+        // GET: Comment/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            int currentUserProfileId = GetCurrentUserProfileId();
+
+            Comment comment = _commentRepository.GetCommentById(id);
+
+            if (comment.UserProfileId != currentUserProfileId)
+            {
+                return NotFound();
+            }
+
+            return View(comment);
         }
 
-        // POST: CommentController/Edit/5
+        // POST: Comment/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Comment comment)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _commentRepository.UpdateComment(comment);
+
+                return RedirectToAction("Details", new { id = id });
             }
-            catch
+            catch(Exception ex)
             {
-                return View();
+                return View(comment);
             }
         }
 
         // GET: Comment/Delete/5
         public ActionResult Delete(int id)
         {
+            int currentUserProfileId = GetCurrentUserProfileId();
+
             Comment comment = _commentRepository.GetCommentById(id);
+
+            if (comment.UserProfileId != currentUserProfileId)
+            {
+                return NotFound();
+            }
 
             return View(comment);
         }
