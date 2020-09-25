@@ -13,6 +13,6 @@ namespace TabloidMVC.Repositories
         void Delete(int id);
         List<Tag> GetAllTags();
         Tag GetTagById(int id);
-
+        void DeletePostTag(int tagId);
     }
 }

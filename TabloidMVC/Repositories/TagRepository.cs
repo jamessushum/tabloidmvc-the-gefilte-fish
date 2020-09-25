@@ -51,19 +51,31 @@ namespace TabloidMVC.Repositories
         }
         public void Delete(int tagId)
         {
-            using (SqlConnection conn = Connection)
+
+            //call to delete relevant items from PostTag join table
+            DeletePostTag(tagId);
+            try
             {
-                conn.Open();
-                using (SqlCommand cmd = conn.CreateCommand())
+                using (SqlConnection conn = Connection)
                 {
-                    cmd.CommandText = @"
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = @"
                         DELETE FROM Tag
                         WHERE Id = @id";
 
-                    cmd.Parameters.AddWithValue("@id", tagId);
-                    cmd.ExecuteNonQuery();
+                        cmd.Parameters.AddWithValue("@id", tagId);
+                        cmd.ExecuteNonQuery();
+                    }
                 }
             }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
         }
         public List<Tag> GetAllTags()
         {
@@ -137,6 +149,30 @@ namespace TabloidMVC.Repositories
 
                 }
             }
+        }
+        public void DeletePostTag(int tagId)
+        {
+            try
+            {
+                using (SqlConnection conn = Connection)
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = @"
+                        DELETE FROM PostTag
+                        WHERE TagId = @tagId";
+
+                        cmd.Parameters.AddWithValue("@tagId", tagId);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
         }
     }
 }
