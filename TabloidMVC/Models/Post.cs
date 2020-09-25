@@ -15,7 +15,6 @@ namespace TabloidMVC.Models
         public string Title { get; set; }
 
         [Required(ErrorMessage = "Please Enter a Content.")]
-        [MaxLength(255, ErrorMessage = "Your tag can't be longer than 50 characters."), MinLength(5, ErrorMessage = "Can't be empty.")]
         public string Content { get; set; }
 
         [DisplayName("Header Image URL")]
