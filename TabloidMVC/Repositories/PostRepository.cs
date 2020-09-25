@@ -88,6 +88,76 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
+        public List<Post> GetUserPosts(int id)
+        {
+            List<Post> posts = new List<Post>();
+            using(SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using(SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText =
+                      @"SELECT
+                        p.Id as pId,
+                        Title, 
+                        Content, 
+                        p.ImageLocation, 
+                        p.CreateDateTime, 
+                        PublishDateTime, 
+                        IsApproved, 
+                        CategoryId, 
+                        UserProfileId,
+                        up.FirstName,
+                        up.LastName,
+                        c.Name,
+                        c.Id as cId
+                        FROM POST p
+                        JOIN UserProfile up ON p.UserProfileId = up.id
+                        JOIN Category c ON p.CategoryId = c.id
+                        WHERE p.UserProfileId = @id";
+                    cmd.Parameters.AddWithValue("@id", id);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while(reader.Read())
+                    {
+                        try
+                        {
+                            Post post = new Post()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("pId")),
+                                Title = reader.GetString(reader.GetOrdinal("Title")),
+                                Content = reader.GetString(reader.GetOrdinal("Content")),
+                                ImageLocation = reader.GetString(reader.GetOrdinal("ImageLocation")),
+                                CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
+                                PublishDateTime = reader.GetDateTime(reader.GetOrdinal("PublishDateTime")),
+                                IsApproved = reader.GetBoolean(reader.GetOrdinal("IsApproved")),
+                                CategoryId = reader.GetInt32(reader.GetOrdinal("CategoryId")),
+                                Category = new Category()
+                                {
+                                    Id = reader.GetInt32(reader.GetOrdinal("cId")),
+                                    Name = reader.GetString(reader.GetOrdinal("Name"))
+                                },
+                                UserProfile = new UserProfile()
+                                {
+                                    FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                                    LastName = reader.GetString(reader.GetOrdinal("LastName"))
+                                }
+
+                            };
+                            posts.Add(post);
+
+                        }catch(Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                        }
+                    }
+
+
+
+                }
+            }
+
+            return posts;
+        }
         public Post GetPublishedPostById(int id)
         {
             using (var conn = Connection)

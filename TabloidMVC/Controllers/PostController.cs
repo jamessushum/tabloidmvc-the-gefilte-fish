@@ -16,6 +16,7 @@ namespace TabloidMVC.Controllers
     {
         private readonly IPostRepository _postRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IUserProfileRepository _urseRepository;
 
         public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository)
         {
@@ -84,7 +85,7 @@ namespace TabloidMVC.Controllers
                 throw new Exception(ex.Message);
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("UserPosts");
         }
         private int GetCurrentUserProfileId()
         {
@@ -93,6 +94,8 @@ namespace TabloidMVC.Controllers
         }
         public IActionResult Edit(int id)
         {
+            HttpGetAttribute http = new HttpGetAttribute();
+            Console.WriteLine(http.Name);
             PostCreateViewModel vm = new PostCreateViewModel()
             {
                 Post = _postRepository.GetPostById(id),
@@ -115,11 +118,24 @@ namespace TabloidMVC.Controllers
             try
             {
                 _postRepository.EditPost(post);
-                return RedirectToAction("Index");
+                return RedirectToAction("UserPosts");
             }
             catch(Exception ex)
             {
                 return View(vm);
+            }
+        }
+        public IActionResult UserPosts(int id)
+        {
+            try
+            {
+                List<Post> posts = _postRepository.GetUserPosts(GetCurrentUserProfileId());
+                ViewBag.Length = posts.Count;
+                return View(posts);
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return RedirectToAction("Index");
             }
         }
     }
