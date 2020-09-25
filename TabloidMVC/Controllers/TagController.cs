@@ -133,7 +133,7 @@ namespace TabloidMVC.Controllers
         //POST: TagRepository
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddTagsToPost (int id, FormCollection collection)
+        public ActionResult AddTagsToPost (int id, IFormCollection collection)
         {
             Console.WriteLine(collection.Files);
             return (Index());
