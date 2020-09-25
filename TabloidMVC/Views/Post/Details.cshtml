@@ -39,8 +39,13 @@
         <section class="row post__content">
             <p class="col-sm-12 mt-5">@Html.DisplayFor(model => model.Content)</p>
         </section>
-        <div>
-            <a class="btn btn-primary" asp-controller="Comment" asp-action="Index" asp-route-id="@Model.Id">View Comments</a>
+        <div class="row">
+            <div class="m-1">
+                <a class="btn btn-primary" asp-controller="Comment" asp-action="Index" asp-route-id="@Model.Id">View Comments</a>
+            </div>
+            <div class="m-1">
+                <a class="btn btn-primary" asp-controller="Comment" asp-action="Create" asp-route-id="@Model.Id">Add Comment</a>
+            </div>
         </div>
     </div>
 </div>
