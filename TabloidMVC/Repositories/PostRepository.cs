@@ -49,7 +49,45 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
+        public Post GetPostById(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                       SELECT p.Id, p.Title, p.Content, 
+                              p.ImageLocation AS HeaderImage,
+                              p.CreateDateTime, p.PublishDateTime, p.IsApproved,
+                              p.CategoryId, p.UserProfileId,
+                              c.[Name] AS CategoryName,
+                              u.FirstName, u.LastName, u.DisplayName, 
+                              u.Email, u.CreateDateTime, u.ImageLocation AS AvatarImage,
+                              u.UserTypeId, 
+                              ut.[Name] AS UserTypeName
+                         FROM Post p
+                              LEFT JOIN Category c ON p.CategoryId = c.id
+                              LEFT JOIN UserProfile u ON p.UserProfileId = u.id
+                              LEFT JOIN UserType ut ON u.UserTypeId = ut.id
+                        WHERE IsApproved = 1 AND p.id = @id";
 
+                    cmd.Parameters.AddWithValue("@id", id);
+                    var reader = cmd.ExecuteReader();
+
+                    Post post = null;
+
+                    if (reader.Read())
+                    {
+                        post = NewPostFromReader(reader);
+                    }
+
+                    reader.Close();
+
+                    return post;
+                }
+            }
+        }
         public Post GetPublishedPostById(int id)
         {
             using (var conn = Connection)
@@ -132,7 +170,6 @@ namespace TabloidMVC.Repositories
             }
         }
 
-
         public void Add(Post post)
         {
             using (var conn = Connection)
@@ -197,5 +234,64 @@ namespace TabloidMVC.Repositories
                 }
             };
         }
+
+        public void DeletePost(int id)
+        {
+            using(SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using(SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                                        DELETE FROM POSTTAG WHERE POSTID = @id
+                                        DELETE FROM COMMENT WHERE POSTID = @id 
+                                        DELETE FROM Post WHERE Id = @id";
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.ExecuteNonQuery();
+                }
+                conn.Close();
+            }
+        }
+        public void EditPost(Post post)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using(SqlCommand cmd = conn.CreateCommand())
+                {
+                    Console.WriteLine("SQL STATMENT RUNNING");
+                    cmd.CommandText = @"UPDATE Post
+                                        SET
+                                        Title = @title,
+                                        Content = @content,
+                                        ImageLocation = @imageLocation,
+                                        IsApproved = @isApproved,
+                                        PublishDateTime = @publishDateTime,
+                                        CategoryId = @catId
+                                        WHERE Id = @id";
+                    cmd.Parameters.AddWithValue("@title", post.Title);
+                    cmd.Parameters.AddWithValue("@content", post.Content);
+                    cmd.Parameters.AddWithValue("@imageLocation", post.ImageLocation);
+                    cmd.Parameters.AddWithValue("@isApproved", true);
+                    cmd.Parameters.AddWithValue("@catId", post.CategoryId);
+                    cmd.Parameters.AddWithValue("@id", post.Id);
+                    cmd.Parameters.AddWithValue("@publishDateTime", post.PublishDateTime);
+                    try
+                    {
+                     cmd.ExecuteNonQuery();
+                    }
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine("Error in EditPost");
+                        Console.WriteLine(ex.Message);
+                    }
+                    
+
+                }
+                conn.Close();
+            }
+
+        }
+        
     }
 }
