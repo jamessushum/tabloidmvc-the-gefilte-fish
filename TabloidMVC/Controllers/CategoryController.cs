@@ -108,7 +108,7 @@ namespace TabloidMVC.Controllers
                     {
                         // ID 14 = "Other"
                         post.CategoryId = 14;
-                        _postRepository.Edit(post);
+                        _postRepository.EditPost(post);
                     }
                     _categoryRepository.Delete(id);
                 }
