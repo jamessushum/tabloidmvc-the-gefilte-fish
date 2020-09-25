@@ -99,6 +99,64 @@ namespace TabloidMVC.Repositories
             }
         }
 
+        // Method to get specific comment by id
+        public Comment GetCommentById(int Id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT
+	                                        c.Id,
+	                                        c.Subject,
+	                                        c.Content,
+	                                        c.CreateDateTime,
+	                                        c.PostId,
+	                                        c.UserProfileId,
+	                                        p.Id AS IdPost,
+	                                        p.Title,
+	                                        p.Content AS PostContent,
+	                                        p.ImageLocation,
+	                                        p.CreateDateTime AS PostCreateDateTime,
+	                                        p.PublishDateTime,
+	                                        p.IsApproved,
+	                                        p.CategoryId,
+	                                        p.UserProfileId,
+	                                        u.Id AS IdUserProfile,
+	                                        u.DisplayName,
+	                                        u.FirstName,
+	                                        u.LastName,
+	                                        u.Email,
+	                                        u.CreateDateTime AS UserProfileCreateDateTime,
+	                                        u.ImageLocation AS UserProfileImageLocation,
+	                                        u.UserTypeId
+                                        FROM
+	                                        Comment c
+	                                        LEFT JOIN Post p ON c.PostId = p.Id
+	                                        LEFT JOIN UserProfile u ON c.UserProfileId = u.Id
+                                        WHERE
+	                                        c.Id = @Id";
+
+                    cmd.Parameters.AddWithValue("@Id", Id);
+
+                    var reader = cmd.ExecuteReader();
+
+                    Comment comment = null;
+
+                    if (reader.Read())
+                    {
+                        comment = NewCommentFromReader(reader);
+                    }
+
+                    reader.Close();
+
+                    return comment;
+                }
+            }
+        }
+
         // Method creates new Comment object with corresponding properties extracting data from reader
         private Comment NewCommentFromReader(SqlDataReader reader)
         {

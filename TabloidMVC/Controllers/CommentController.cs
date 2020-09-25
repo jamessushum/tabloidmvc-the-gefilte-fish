@@ -32,7 +32,8 @@ namespace TabloidMVC.Controllers
             PostCommentViewModel vm = new PostCommentViewModel()
             {
                 Post = post,
-                Comments = comments
+                Comments = comments,
+                CurrentUserProfileId = GetCurrentUserProfileId()
             };
 
             return View(vm);
@@ -92,13 +93,13 @@ namespace TabloidMVC.Controllers
             }
         }
 
-        // GET: CommentController/Delete/5
+        // GET: Comment/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: CommentController/Delete/5
+        // POST: Comment/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
