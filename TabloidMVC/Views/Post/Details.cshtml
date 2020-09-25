@@ -26,7 +26,7 @@
                 <a asp-action="Delete" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="Delete">
                     <i class="fas fa-trash"></i>
                 </a>                
-                <a asp-controller="Tag" asp-action="AddTagsToPost" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="Delete">
+                <a asp-controller="Tag" asp-action="AddTagsToPost" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="Delete">
                     <i class="fa fa-tags"></i>
                 </a>
             </div>

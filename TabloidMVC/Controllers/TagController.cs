@@ -120,23 +120,22 @@ namespace TabloidMVC.Controllers
         //GET: TagController
         public ActionResult AddTagsToPost(int Id)
         {
-            List<Tag> tags = _tagRepo.GetAllTags();
             AddTagPostViewModel vm = new AddTagPostViewModel
             {
                 Post = _postRepo.GetPublishedPostById(Id),
-                Tags = tags
+                Tags = _tagRepo.GetAllTags()
             };
-
             return View(vm);
         }
 
         //POST: TagRepository
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddTagsToPost (int id, IFormCollection collection)
+        public ActionResult AddTagsToPost (int id, AddTagPostViewModel vm)
         {
-            Console.WriteLine(collection.Files);
-            return (Index());
+            List<Tag> tags = _tagRepo.GetAllTags();
+
+            return View();
         }
     }
 }
