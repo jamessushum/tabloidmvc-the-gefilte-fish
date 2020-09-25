@@ -157,6 +157,25 @@ namespace TabloidMVC.Repositories
             }
         }
 
+        // Method deletes specific comment from database
+        public void DeleteComment(int Id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"DELETE FROM Comment
+                                        WHERE Id = @Id";
+
+                    cmd.Parameters.AddWithValue("@Id", Id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         // Method creates new Comment object with corresponding properties extracting data from reader
         private Comment NewCommentFromReader(SqlDataReader reader)
         {
