@@ -6,6 +6,6 @@ namespace TabloidMVC.Models.ViewModels
     {
         public Post Post { get; set; }
         public double ReadTime { get; set; }
-        public List<string> TagNames { get; set; }
+        public List<Tag> PostTags { get; set; }
     }
 }
