@@ -120,10 +120,16 @@ namespace TabloidMVC.Controllers
         //GET: TagController
         public ActionResult AddTagsToPost(int Id)
         {
+
+            //tag list
+            List<Tag> tags = _tagRepo.GetAllTags();
+            //
+
             AddTagPostViewModel vm = new AddTagPostViewModel
             {
                 Post = _postRepo.GetPublishedPostById(Id),
-                Tags = _tagRepo.GetAllTags()
+                Tags = _tagRepo.GetAllTags(),
+                CurrentTagIds = _tagRepo.GetPostTags(Id)
             };
             return View(vm);
         }
@@ -131,25 +137,36 @@ namespace TabloidMVC.Controllers
         //POST: TagRepository
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddTagsToPost (int id, AddTagPostViewModel vm)
+        public ActionResult AddTagsToPost(int id, AddTagPostViewModel vm)
         {
             try
             {
+                List<int> previouslySelectedTags = _tagRepo.GetPostTags(id);
+
                 if (vm.SelectedTagIds != null)
                 {
                     foreach (int tagId in vm.SelectedTagIds)
                     {
-                        _tagRepo.AddTagToPost(tagId, id);
+                        if (!previouslySelectedTags.Contains(tagId))
+                        {
+                            _tagRepo.AddTagToPost(tagId, id);
+                        }
+                        
+                    }
+                    foreach (int tagId in previouslySelectedTags)
+                    {
+                        if (!vm.SelectedTagIds.Contains(tagId))
+                        {
+                            _tagRepo.RemoveTagFromPost(tagId, id);
+                        }
                     }
                 }
 
-                string idStr = "/" + id.ToString();
-                
-                return RedirectToAction("Details", "Post", idStr);
+                return RedirectToAction("Details", "Post", new { id = id });
             }
             catch (Exception)
             {
-                return View("index");
+                return RedirectToAction("Details", "Post", new { id = id });
             }
         }
     }

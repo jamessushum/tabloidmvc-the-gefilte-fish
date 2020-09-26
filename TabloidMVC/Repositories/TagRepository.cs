@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TabloidMVC.Models;
+using TabloidMVC.Models.ViewModels;
 
 namespace TabloidMVC.Repositories
 {
@@ -150,6 +151,53 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
+        public List<int> GetPostTags(int postId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open(); 
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    //Sql command
+                    cmd.CommandText = @"
+                           SELECT
+                            Id,
+                            TagId
+                           FROM PostTag
+                           WHERE PostId = @postId
+                        ";
+                    //Sql variables
+                    cmd.Parameters.AddWithValue("@postId", postId);
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    List<PostTag> postTags = new List<PostTag>();
+                    List<int> currentTags = new List<int>();
+
+                    while(reader.Read())
+                    {
+                        PostTag postTag = new PostTag()
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            PostId = postId,
+                            TagId = reader.GetInt32(reader.GetOrdinal("TagId"))
+                        };
+
+                        postTags.Add(postTag);
+                    }
+
+                    foreach (PostTag postTag in postTags)
+                    {
+                        currentTags.Add(postTag.TagId);
+                    }
+
+                    reader.Close();
+                    return currentTags;
+                }
+                
+            }
+            
+           
+        }
         public void DeletePostTag(int tagId)
         {
             try
@@ -190,6 +238,28 @@ namespace TabloidMVC.Repositories
                     cmd.Parameters.AddWithValue("@PostId", postId);
 
                     cmd.ExecuteNonQuery();
+
+                }
+            }
+        }
+        public void RemoveTagFromPost(int tagId, int postId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+
+                    // Sql command
+                    cmd.CommandText = @"
+                        DELETE FROM PostTag
+                        WHERE TagId = @TagId
+                        AND WHERE PostId = @PostId";
+                    //declaring Sql variable
+                    cmd.Parameters.AddWithValue("@TagId", tagId);
+                    cmd.Parameters.AddWithValue("@PostId", postId);
+
+                    _ = cmd.ExecuteNonQuery();
 
                 }
             }
