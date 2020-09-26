@@ -16,15 +16,15 @@
             {
                 if (Model.CurrentTagIds.Contains(tag.Id))
                 {
-                    <div class="form-check form-check-inline m-1" syle="min-width: 10%">
-                        <input class="form-check-input" name="SelectedTagIds" type="checkbox" id="ck-@tag.Id" value="@tag.Id" checked>
+                    <div class="form-check form-check-inline m-1 card flex-row flex-nowrap" syle="min-width: 10%">
+                        <input class="form-check-input ml-2" name="SelectedTagIds" type="checkbox" id="ck-@tag.Id" value="@tag.Id" checked>
                         <label class="form-check-label pr-2 pl-2 card-text " for="ck-@tag.Id">@tag.Name</label>
                     </div>
                 }
                 else
                 {
-                    <div class="form-check form-check-inline m-1" syle="min-width: 10%">
-                        <input class="form-check-input" name="SelectedTagIds" type="checkbox" id="ck-@tag.Id" value="@tag.Id">
+                    <div class="form-check form-check-inline m-1 row card flex-row flex-nowrap" syle="min-width: 10%">
+                        <input class="form-check-input ml-2" name="SelectedTagIds" type="checkbox" id="ck-@tag.Id" value="@tag.Id">
                         <label class="form-check-label pr-2 pl-2 card-text " for="ck-@tag.Id">@tag.Name</label>
                     </div>
                 }

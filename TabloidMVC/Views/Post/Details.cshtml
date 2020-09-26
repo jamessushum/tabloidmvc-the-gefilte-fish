@@ -42,7 +42,7 @@
 
         }
 
-        @if (!((Model.PostTags != null) || (!Model.PostTags.Any())))
+        @if (!((Model.PostTags == null) || (!Model.PostTags.Any())))
         {
 
             <section class="row justify-content-start mt-3">
