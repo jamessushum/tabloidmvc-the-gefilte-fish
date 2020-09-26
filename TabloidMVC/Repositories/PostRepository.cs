@@ -76,13 +76,16 @@ namespace TabloidMVC.Repositories
                     cmd.Parameters.AddWithValue("@id", id);
                     var reader = cmd.ExecuteReader();
 
-                    Post post = null;
 
+                    Post post;
                     if (reader.Read())
                     {
-                        post = NewPostFromReader(reader);
-                    }
+                       post = NewPostFromReader(reader);
+                       reader.Close();
 
+                        return post;
+                    }
+                    post = null;
                     reader.Close();
 
                     return post;
@@ -115,7 +118,8 @@ namespace TabloidMVC.Repositories
                         FROM POST p
                         JOIN UserProfile up ON p.UserProfileId = up.id
                         JOIN Category c ON p.CategoryId = c.id
-                        WHERE p.UserProfileId = @id";
+                        WHERE p.UserProfileId = @id
+                        ORDER BY CreateDateTime DESC";
                     cmd.Parameters.AddWithValue("@id", id);
                     SqlDataReader reader = cmd.ExecuteReader();
                     while(reader.Read())
@@ -321,6 +325,7 @@ namespace TabloidMVC.Repositories
                 ImageLocation = DbUtils.GetNullableString(reader, "HeaderImage"),
                 CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
                 PublishDateTime = DbUtils.GetNullableDateTime(reader, "PublishDateTime"),
+                IsApproved = reader.GetBoolean(reader.GetOrdinal("IsApproved")),
                 CategoryId = reader.GetInt32(reader.GetOrdinal("CategoryId")),
                 Category = new Category()
                 {

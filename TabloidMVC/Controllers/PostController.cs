@@ -121,13 +121,13 @@ namespace TabloidMVC.Controllers
             post.Print();
             PostCreateViewModel vm = new PostCreateViewModel()
             {
-                Post = _postRepository.GetPostById(id),
+                Post = post,
                 CategoryOptions = _categoryRepository.GetAll()
             };
             try
             {
                 _postRepository.EditPost(post);
-                return RedirectToAction("UserPosts");
+                return RedirectToAction("Details", new { id = post.Id });
             }
             catch(Exception ex)
             {
