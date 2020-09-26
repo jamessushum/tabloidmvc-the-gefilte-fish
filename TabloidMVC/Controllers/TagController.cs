@@ -130,7 +130,8 @@ namespace TabloidMVC.Controllers
             AddTagPostViewModel vm = new AddTagPostViewModel
             {
                 Post = _postRepo.GetPublishedPostById(Id),
-                Tags = _tagRepo.GetAllTags()
+                Tags = _tagRepo.GetAllTags(),
+                CurrentTagIds = new List<int>()
             };
 
            foreach (Tag tag in currentTags)
@@ -150,6 +151,7 @@ namespace TabloidMVC.Controllers
             {
                 List<Tag> previouslySelectedTags = _tagRepo.GetPostTags(id);
                 List<int> previouslySelectedTagIds = new List<int>();
+
                 foreach (Tag tag in previouslySelectedTags)
                 {
                     previouslySelectedTagIds.Add(tag.Id);

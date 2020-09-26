@@ -186,7 +186,7 @@ namespace TabloidMVC.Repositories
                         };
 
                         postTags.Add(postTag);
-                        currentTagIds.Add(postTag.Id);
+                        currentTagIds.Add(postTag.TagId);
                     }
 
                     foreach (Tag tag in tags)
