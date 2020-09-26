@@ -151,7 +151,8 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
-        public List<int> GetPostTags(int postId)
+        //only returns tag Ids of posts, not full postTag object
+        public List<Tag> GetPostTags(int postId)
         {
             using (SqlConnection conn = Connection)
             {
@@ -170,8 +171,10 @@ namespace TabloidMVC.Repositories
                     cmd.Parameters.AddWithValue("@postId", postId);
 
                     SqlDataReader reader = cmd.ExecuteReader();
+                    List<Tag> tags = GetAllTags();
                     List<PostTag> postTags = new List<PostTag>();
-                    List<int> currentTags = new List<int>();
+                    List<Tag> currentTags = new List<Tag>();
+                    List<int> currentTagIds = new List<int>();
 
                     while(reader.Read())
                     {
@@ -183,11 +186,15 @@ namespace TabloidMVC.Repositories
                         };
 
                         postTags.Add(postTag);
+                        currentTagIds.Add(postTag.Id);
                     }
 
-                    foreach (PostTag postTag in postTags)
+                    foreach (Tag tag in tags)
                     {
-                        currentTags.Add(postTag.TagId);
+                        if (currentTagIds.Contains(tag.Id))
+                        {
+                            currentTags.Add(tag);
+                        }
                     }
 
                     reader.Close();
