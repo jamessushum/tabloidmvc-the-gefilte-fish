@@ -376,7 +376,6 @@ namespace TabloidMVC.Repositories
                 conn.Open();
                 using(SqlCommand cmd = conn.CreateCommand())
                 {
-                    Console.WriteLine("SQL STATMENT RUNNING");
                     cmd.CommandText = @"UPDATE Post
                                         SET
                                         Title = @title,
@@ -399,7 +398,7 @@ namespace TabloidMVC.Repositories
                     }
                     catch(Exception ex)
                     {
-                        Console.WriteLine("Error in EditPost");
+                       
                         Console.WriteLine(ex.Message);
                     }
                     

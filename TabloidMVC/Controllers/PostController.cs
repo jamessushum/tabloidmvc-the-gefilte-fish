@@ -117,8 +117,7 @@ namespace TabloidMVC.Controllers
         [HttpPost]
         public IActionResult Edit(int id, Post post)
         {
-            Console.WriteLine("Hitting Edit P2");
-            post.Print();
+            
             PostCreateViewModel vm = new PostCreateViewModel()
             {
                 Post = post,
