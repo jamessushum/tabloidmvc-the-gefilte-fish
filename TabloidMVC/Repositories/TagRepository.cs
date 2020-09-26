@@ -254,7 +254,7 @@ namespace TabloidMVC.Repositories
                     cmd.CommandText = @"
                         DELETE FROM PostTag
                         WHERE TagId = @TagId
-                        AND WHERE PostId = @PostId";
+                            AND PostId = @PostId";
                     //declaring Sql variable
                     cmd.Parameters.AddWithValue("@TagId", tagId);
                     cmd.Parameters.AddWithValue("@PostId", postId);
