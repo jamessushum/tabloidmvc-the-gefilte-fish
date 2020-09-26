@@ -119,7 +119,7 @@ namespace TabloidMVC.Controllers
         }
 
         //GET: TagController
-        public ActionResult AddTagsToPost(int Id)
+        public ActionResult TagManager(int Id)
         {
 
             //all tags
@@ -145,7 +145,7 @@ namespace TabloidMVC.Controllers
         //POST: TagRepository
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddTagsToPost(int id, AddTagPostViewModel vm)
+        public ActionResult TagManager(int id, AddTagPostViewModel vm)
         {
             try
             {
