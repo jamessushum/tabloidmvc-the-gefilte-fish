@@ -26,6 +26,9 @@
                 <a asp-action="Delete" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="Delete">
                     <i class="fas fa-trash"></i>
                 </a>
+                <a asp-controller="Tag" asp-action="TagManager" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="Tag Manager">
+                    <i class="fa fa-tags"></i>
+                </a>
             </div>
         </section>
         <hr />
@@ -36,7 +39,26 @@
                     <img src="@Model.Post.ImageLocation" />
                 </div>
             </section>
+
         }
+
+        @if (!((Model.PostTags == null) || (!Model.PostTags.Any())))
+        {
+
+            <section class="row justify-content-start mt-3">
+                <h5 class="text-secondary m-1 p-1 align-middle">Tags:</h5>
+                @foreach (Tag tag in Model.PostTags)
+                {
+                    <div class="card m-1 p-1 text-center" id="t-@tag.Id">
+                        @tag.Name
+                    </div>
+                }
+            </section>
+            <hr />
+        }
+
+
+
         <section class="row post__content">
             <p class="col-sm-12 mt-5">@Html.DisplayFor(model => model.Post.Content)</p>
         </section>

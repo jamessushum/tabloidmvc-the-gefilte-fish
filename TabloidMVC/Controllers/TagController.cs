@@ -4,7 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Razor.Language;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using TabloidMVC.Models;
+using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 
 namespace TabloidMVC.Controllers
@@ -12,9 +15,11 @@ namespace TabloidMVC.Controllers
     public class TagController : Controller
     {
         private readonly ITagRepository _tagRepo;
-        public TagController(ITagRepository tagRepository)
+        private readonly IPostRepository _postRepo;
+        public TagController(ITagRepository tagRepository, IPostRepository postRepository)
         {
             _tagRepo = tagRepository;
+            _postRepo = postRepository;
         }
         // GET: TagController
         public ActionResult Index()
@@ -110,6 +115,74 @@ namespace TabloidMVC.Controllers
             catch (Exception)
             {
                 return View(tag);
+            }
+        }
+
+        //GET: TagController
+        public ActionResult TagManager(int Id)
+        {
+
+            //all tags
+            List<Tag> tags = _tagRepo.GetAllTags();
+            //current tags that apply to post
+            List<Tag> currentTags = _tagRepo.GetPostTags(Id);
+
+            AddTagPostViewModel vm = new AddTagPostViewModel
+            {
+                Post = _postRepo.GetPublishedPostById(Id),
+                Tags = _tagRepo.GetAllTags(),
+                CurrentTagIds = new List<int>()
+            };
+
+           foreach (Tag tag in currentTags)
+            {
+                vm.CurrentTagIds.Add(tag.Id);
+            }
+            
+            return View(vm);
+        }
+
+        //POST: TagRepository
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult TagManager(int id, AddTagPostViewModel vm)
+        {
+            try
+            {
+                List<Tag> previouslySelectedTags = _tagRepo.GetPostTags(id);
+                List<int> previouslySelectedTagIds = new List<int>();
+
+                foreach (Tag tag in previouslySelectedTags)
+                {
+                    previouslySelectedTagIds.Add(tag.Id);
+                }
+
+                
+
+                if (vm.SelectedTagIds != null)
+                {
+                    foreach (int tagId in vm.SelectedTagIds)
+                    {
+                        if (!previouslySelectedTagIds.Contains(tagId))
+                        {
+                            _tagRepo.AddTagToPost(tagId, id);
+                        }
+                        
+                    }
+                    foreach (int tagId in previouslySelectedTagIds)
+                    {
+                        if (!vm.SelectedTagIds.Contains(tagId))
+                        {
+                            _tagRepo.RemoveTagFromPost(tagId, id);
+                        }
+                    }
+                }
+
+                return RedirectToAction("Details", "Post", new { id = id });
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Details", "Post", new { id = id });
             }
         }
     }
