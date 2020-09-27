@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using TabloidMVC.Models;
@@ -50,6 +52,50 @@ namespace TabloidMVC.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        // GET: AccountController/Create
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: AccountController/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(UserProfile userProfile)
+        {
+            try
+            {
+                List<UserType> userTypes = _userProfileRepository.GetUserTypes();
+                UserType author = userTypes.First(type => type.Name == "Author");
+
+                userProfile.CreateDateTime = DateTime.Now;
+                userProfile.UserTypeId = author.Id;
+                userProfile.Deactivated = false;
+
+                _userProfileRepository.Create(userProfile);
+
+                ////copies basic login functionality
+                //var claims = new List<Claim>
+                //{
+                //new Claim(ClaimTypes.NameIdentifier, userProfile.Id.ToString()),
+                //new Claim(ClaimTypes.Email, userProfile.Email),
+                //};
+
+                //var claimsIdentity = new ClaimsIdentity(
+                //    claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                //await HttpContext.SignInAsync(
+                //    CookieAuthenticationDefaults.AuthenticationScheme,
+                //    new ClaimsPrincipal(claimsIdentity));
+
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception:", ex);
+                return View();
+            }
+        }
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
