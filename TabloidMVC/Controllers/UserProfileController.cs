@@ -84,9 +84,7 @@ namespace TabloidMVC.Controllers
         // GET: UserProfileController/Delete/5
         public ActionResult Delete(int id)
         {
-            List<UserProfile> userProfiles = _userProfileRepository.GetAll();
-            UserProfile userProfile = userProfiles[1];
-            //UserProfile userProfile = _userProfileRepository.GetById(id);
+            UserProfile userProfile = _userProfileRepository.GetById(id);
             return View(userProfile);
         }
 
@@ -101,7 +99,7 @@ namespace TabloidMVC.Controllers
                 _userProfileRepository.Update(userProfile);
                 return RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return View(userProfile);
             }

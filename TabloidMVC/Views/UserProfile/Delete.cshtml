@@ -11,23 +11,23 @@
 
         <form class="card-body" asp-action="Delete">
             <dl class="row">
-                <dt class="col-sm-2">
+                <dt class="col-sm-5">
                     @Html.DisplayNameFor(model => model.DisplayName)
                 </dt>
-                <dd class="col-sm-10">
+                <dd class="col-sm-7">
                     @Html.DisplayFor(model => model.DisplayName)
                     <input asp-for="DisplayName" type="hidden" />
                 </dd>
-                <dt class="col-sm-2">
+                <dt class="col-sm-5">
                     @Html.DisplayNameFor(model => model.FullName)
                 </dt>
-                <dd class="col-sm-10">
+                <dd class="col-sm-7">
                     @Html.DisplayFor(model => model.FullName)
                 </dd>
-                <dt class="col-sm-2">
+                <dt class="col-sm-5">
                     @Html.DisplayNameFor(model => model.Email)
                 </dt>
-                <dd class="col-sm-10">
+                <dd class="col-sm-7">
                     @Html.DisplayFor(model => model.Email)
                     <input asp-for="Email" type="hidden" />
                 </dd>
