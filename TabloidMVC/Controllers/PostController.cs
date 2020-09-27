@@ -18,11 +18,13 @@ namespace TabloidMVC.Controllers
     {
         private readonly IPostRepository _postRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ITagRepository _tagRepository;
 
-        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository)
+        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ITagRepository tagRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
+            _tagRepository = tagRepository;
         }
 
         public IActionResult Index()
@@ -42,9 +44,9 @@ namespace TabloidMVC.Controllers
             PostDetailView pdv = new PostDetailView()
             {
                 Post = post,
-                ReadTime = WordCount % 265 == 0 ? WordCount / 265 : WordCount / 265 + 1
-            };
-            
+                ReadTime = WordCount % 265 == 0 ? WordCount / 265 : WordCount / 265 + 1,
+                PostTags = _tagRepository.GetPostTags(id)
+        };            
             return View(pdv);
         }
 
