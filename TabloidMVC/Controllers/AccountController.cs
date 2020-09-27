@@ -70,26 +70,26 @@ namespace TabloidMVC.Controllers
                 List<UserType> userTypes = _userProfileRepository.GetUserTypes();
                 UserType author = userTypes.First(type => type.Name == "Author");
 
-                ////getting all users for simple email verification
-                //List<UserProfile> allActiveUsers = _userProfileRepository.GetAllActive();
-                //List<UserProfile> deactivatedUsers = _userProfileRepository.GetDeactivated();
+                //getting all users for simple email verification
+                List<UserProfile> allActiveUsers = _userProfileRepository.GetAllActive();
+                List<UserProfile> deactivatedUsers = _userProfileRepository.GetDeactivated();
 
-                //// checks active users
-                //foreach (UserProfile user in allActiveUsers)
-                //{
-                //    if (user.Email == userProfile.Email)
-                //    {
-                //        return View();
-                //    }
-                //}
-                //// checks deactivated users
-                //foreach (UserProfile user in deactivatedUsers)
-                //{
-                //    if (user.Email == userProfile.Email)
-                //    {
-                //        return View();
-                //    }
-                //}
+                // checks active users
+                foreach (UserProfile user in allActiveUsers)
+                {
+                    if (user.Email == userProfile.Email)
+                    {
+                        return View();
+                    }
+                }
+                // checks deactivated users
+                foreach (UserProfile user in deactivatedUsers)
+                {
+                    if (user.Email == userProfile.Email)
+                    {
+                        return View();
+                    }
+                }
 
                 userProfile.CreateDateTime = DateTime.Now;
                 userProfile.UserTypeId = author.Id;
