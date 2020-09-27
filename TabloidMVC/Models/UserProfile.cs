@@ -32,6 +32,7 @@ namespace TabloidMVC.Models
         public int UserTypeId { get; set; }
         [DisplayName("User Type")]
         public UserType UserType { get; set; }
+        public bool Deactivated { get; set; }
         [DisplayName("Name")]
         public string FullName
         {
