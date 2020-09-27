@@ -152,5 +152,63 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
+        public void UpdateUserProfile(UserProfile user)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"                       
+                        UPDATE
+                        SET  
+                            FirstName = @firstName, 
+                            LastName = @lastName, 
+                            DisplayName = @displayName, 
+                            Email = @Email,
+                            CreateDateTime = @createDateTime, 
+                            ImageLocation = @imageLocation, 
+                            UserTypeId = @userTypeId
+                        WHERE Id = @id";
+                }
+            }
+        }
+        public List<UserType> GetUserTypes()
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT
+                            Id,
+                            Name
+                        FROM UserType
+                        ";
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    List<UserType> userTypes = new List<UserType>();
+                    
+                    while (reader.Read())
+                    {
+                        UserType userType = new UserType
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Name = reader.GetString(reader.GetOrdinal("Name"))
+                        };
+
+                        userTypes.Add(userType);
+                    }
+
+                    reader.Close();
+
+                    return userTypes;
+                }
+            }
+            
+
+            
+        }
     }
 }

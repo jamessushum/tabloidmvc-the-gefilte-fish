@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TabloidMVC.Models;
+using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 
 namespace TabloidMVC.Controllers
@@ -62,7 +63,18 @@ namespace TabloidMVC.Controllers
         // GET: UserProfileController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            ProfileEditViewModel evm = new ProfileEditViewModel()
+            {
+                User = _userProfileRepository.GetById(id),
+            };
+            
+
+            if (evm.User == null)
+            {
+                return NotFound();
+            }
+
+            return View(evm);
         }
 
         // POST: UserProfileController/Edit/5
