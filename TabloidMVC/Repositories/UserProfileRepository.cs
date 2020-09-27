@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using TabloidMVC.Models;
 using TabloidMVC.Utils;
@@ -160,16 +161,37 @@ namespace TabloidMVC.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"                       
-                        UPDATE
+                        UPDATE UserProfile
                         SET  
                             FirstName = @firstName, 
                             LastName = @lastName, 
                             DisplayName = @displayName, 
                             Email = @Email,
-                            CreateDateTime = @createDateTime, 
+                            CreateDateTime = @createDateTime,  
                             ImageLocation = @imageLocation, 
                             UserTypeId = @userTypeId
-                        WHERE Id = @id";
+                        WHERE 
+                            Id = @id";
+
+                    cmd.Parameters.AddWithValue("@id", user.Id);
+                    cmd.Parameters.AddWithValue("@firstName", user.FirstName);
+                    cmd.Parameters.AddWithValue("@lastName", user.LastName);
+                    cmd.Parameters.AddWithValue("@displayName", user.DisplayName);
+                    cmd.Parameters.AddWithValue("@userTypeId", user.UserTypeId);
+                    cmd.Parameters.AddWithValue("@createDateTime", user.CreateDateTime);
+
+                    if (user.ImageLocation == null)
+                    {
+                        cmd.Parameters.AddWithValue("@imageLocation", DBNull.Value);
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue("@imageLocation", user.ImageLocation);
+                    }
+
+
+
+                    cmd.ExecuteNonQuery();
                 }
             }
         }

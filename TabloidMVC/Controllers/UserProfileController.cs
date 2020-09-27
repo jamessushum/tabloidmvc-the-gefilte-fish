@@ -66,6 +66,7 @@ namespace TabloidMVC.Controllers
             ProfileEditViewModel evm = new ProfileEditViewModel()
             {
                 User = _userProfileRepository.GetById(id),
+                UserTypes = _userProfileRepository.GetUserTypes()
             };
             
 
@@ -80,15 +81,18 @@ namespace TabloidMVC.Controllers
         // POST: UserProfileController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, ProfileEditViewModel evm)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _userProfileRepository.UpdateUserProfile(evm.User);
+
+                return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                evm.UserTypes =_userProfileRepository.GetUserTypes();
+                return View(evm);
             }
         }
 
