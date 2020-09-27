@@ -1,0 +1,28 @@
+﻿@model TabloidMVC.Models.UserProfile
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container pt-5">
+    <h1>User Details</h1>
+    <div class="card" style="width: 30rem">
+        @if (string.IsNullOrEmpty(Model.ImageLocation))
+        {
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Font_Awesome_5_regular_user-circle.svg" class="card-img-top img-fluid" alt="default image" style="height:250px">
+        }
+        else
+        {
+            <img src="@Model.ImageLocation" class="card-img-top img-fluid" alt="user profile image" style="height:250px">
+        }
+        <hr />
+        <div class="card-body">
+            <h5 class="card-title">@Model.FullName</h5>
+            <h6 class="card-subtitle mb-2"><span class="font-weight-bold">Display Name:</span> &nbsp; <span class="text-muted">@Model.DisplayName</span></h6>
+            <h6 class="card-subtitle mb-2"><span class="font-weight-bold">Email:</span> &nbsp; <span class="text-muted">@Model.Email</span></h6>
+            <h6 class="card-subtitle mb-2"><span class="font-weight-bold">Date Joined:</span> &nbsp; <span class="text-muted">@Model.CreateDateTime</span></h6>
+            <h6 class="card-subtitle mb-2"><span class="font-weight-bold">User Type:</span> &nbsp; <span class="text-muted">@Model.UserType.Name</span></h6>
+            <a class="btn btn-primary btn-block" asp-action="Index">Back to List</a>
+        </div>
+    </div>
+</div>
