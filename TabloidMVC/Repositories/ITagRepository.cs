@@ -13,6 +13,9 @@ namespace TabloidMVC.Repositories
         void Delete(int id);
         List<Tag> GetAllTags();
         Tag GetTagById(int id);
+        List<Tag> GetPostTags(int postId);
         void DeletePostTag(int tagId);
+        void AddTagToPost(int tagId, int postId);
+        void RemoveTagFromPost(int tagId, int postId);
     }
 }

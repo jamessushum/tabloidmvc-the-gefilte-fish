@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TabloidMVC.Models;
+using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 
 namespace TabloidMVC.Controllers
 {
+    [Authorize]
     public class UserProfileController : Controller
     {
         private readonly IUserProfileRepository _userProfileRepository;
@@ -17,7 +19,7 @@ namespace TabloidMVC.Controllers
         {
             _userProfileRepository = userProfileRepository;
         }
-        [Authorize]
+
         // GET: UserProfileController
         public ActionResult Index()
         {
@@ -62,42 +64,60 @@ namespace TabloidMVC.Controllers
         // GET: UserProfileController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            ProfileEditViewModel evm = new ProfileEditViewModel()
+            {
+                User = _userProfileRepository.GetById(id),
+                UserTypes = _userProfileRepository.GetUserTypes()
+            };
+            
+
+            if (evm.User == null)
+            {
+                return NotFound();
+            }
+
+            return View(evm);
         }
 
         // POST: UserProfileController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, ProfileEditViewModel evm)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _userProfileRepository.Update(evm.User);
+
+                return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                evm.UserTypes =_userProfileRepository.GetUserTypes();
+                return View(evm);
             }
         }
 
         // GET: UserProfileController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            UserProfile userProfile = _userProfileRepository.GetById(id);
+            return View(userProfile);
         }
 
         // POST: UserProfileController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, UserProfile userProfile)
         {
             try
             {
+                userProfile.Deactivated = true;
+                _userProfileRepository.Update(userProfile);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception)
             {
-                return View();
+                return View(userProfile);
             }
         }
     }
