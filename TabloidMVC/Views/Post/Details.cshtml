@@ -4,6 +4,7 @@
     ViewData["Title"] = $"Post - {Model.Post.Title}";
 }
 
+
 <div class="container pt-5">
     <div class="post">
         <section class="px-3">
@@ -68,6 +69,7 @@
             </div>
             <div class="m-1">
                 <a class="btn btn-primary" asp-controller="Comment" asp-action="Create" asp-route-id="@Model.Post.Id">Add Comment</a>
+
             </div>
         </div>
     </div>
