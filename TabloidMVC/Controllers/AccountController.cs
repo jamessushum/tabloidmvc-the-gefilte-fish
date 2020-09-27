@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,9 +66,30 @@ namespace TabloidMVC.Controllers
         {
             try
             {
+                //getting userTypes so that usertypeId isn't hard coded
                 List<UserType> userTypes = _userProfileRepository.GetUserTypes();
                 UserType author = userTypes.First(type => type.Name == "Author");
 
+                ////getting all users for simple email verification
+                //List<UserProfile> allActiveUsers = _userProfileRepository.GetAllActive();
+                //List<UserProfile> deactivatedUsers = _userProfileRepository.GetDeactivated();
+
+                //// checks active users
+                //foreach (UserProfile user in allActiveUsers)
+                //{
+                //    if (user.Email == userProfile.Email)
+                //    {
+                //        return View();
+                //    }
+                //}
+                //// checks deactivated users
+                //foreach (UserProfile user in deactivatedUsers)
+                //{
+                //    if (user.Email == userProfile.Email)
+                //    {
+                //        return View();
+                //    }
+                //}
 
                 userProfile.CreateDateTime = DateTime.Now;
                 userProfile.UserTypeId = author.Id;
@@ -75,6 +97,7 @@ namespace TabloidMVC.Controllers
 
                 _userProfileRepository.Create(userProfile);
 
+                //Create new credentials for login
                 Credentials credentials = new Credentials
                 {
                     Email = userProfile.Email
