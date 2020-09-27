@@ -200,9 +200,10 @@ namespace TabloidMVC.Repositories
                                         ImageLocation,
                                         Email,
                                         Deactivated,
-                                        UserTypeId)
+                                        UserTypeId,
+                                        CreateDateTime)
                                         OUTPUT INSERTED.Id
-                                        VALUES (@FirstName, @LastName, @DisplayName, @Email, @ImageLocation, @Deactivated, @UserTypeId)";
+                                        VALUES (@FirstName, @LastName, @DisplayName, @ImageLocation, @Email, @Deactivated, @UserTypeId, @CreateDateTime)";
                     cmd.Parameters.AddWithValue("@FirstName", userProfile.FirstName);
                     cmd.Parameters.AddWithValue("@LastName", userProfile.LastName);
                     cmd.Parameters.AddWithValue("@DisplayName", userProfile.DisplayName);
@@ -210,9 +211,9 @@ namespace TabloidMVC.Repositories
                     cmd.Parameters.AddWithValue("@ImageLocation", DbUtils.ValueOrDBNull(userProfile.ImageLocation));
                     cmd.Parameters.AddWithValue("@Deactivated", userProfile.Deactivated);
                     cmd.Parameters.AddWithValue("@UserTypeId", userProfile.UserTypeId);
+                    cmd.Parameters.AddWithValue("@CreateDateTime", userProfile.CreateDateTime);
 
-                    userProfile.Id = (int)cmd.ExecuteScalar();
-                }
+                    userProfile.Id = (int)cmd.ExecuteScalar();                }
             }
         }
 

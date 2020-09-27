@@ -68,27 +68,21 @@ namespace TabloidMVC.Controllers
                 List<UserType> userTypes = _userProfileRepository.GetUserTypes();
                 UserType author = userTypes.First(type => type.Name == "Author");
 
+
                 userProfile.CreateDateTime = DateTime.Now;
                 userProfile.UserTypeId = author.Id;
                 userProfile.Deactivated = false;
 
                 _userProfileRepository.Create(userProfile);
 
-                ////copies basic login functionality
-                //var claims = new List<Claim>
-                //{
-                //new Claim(ClaimTypes.NameIdentifier, userProfile.Id.ToString()),
-                //new Claim(ClaimTypes.Email, userProfile.Email),
-                //};
+                Credentials credentials = new Credentials
+                {
+                    Email = userProfile.Email
+                };
 
-                //var claimsIdentity = new ClaimsIdentity(
-                //    claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                Login(credentials);
 
-                //await HttpContext.SignInAsync(
-                //    CookieAuthenticationDefaults.AuthenticationScheme,
-                //    new ClaimsPrincipal(claimsIdentity));
-
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home"); 
             }
             catch (Exception ex)
             {
