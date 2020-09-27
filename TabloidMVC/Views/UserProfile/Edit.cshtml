@@ -1,0 +1,71 @@
+﻿@model TabloidMVC.Models.ViewModels.ProfileEditViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+<div class="container pt-5">
+    <div class="row justify-content-center">
+        <div class="card col-md-6">
+            <h3 class="mt-3 text-primary text-center card-title">Edit Profile Type</h3>
+            <form class="mt-5 card-body" asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <dl class="row">
+                    <dt class="col-sm-5">
+                        @Html.DisplayNameFor(model => model.User.DisplayName)
+                    </dt>
+                    <dd class="col-sm-7">
+                        @Html.DisplayFor(model => model.User.DisplayName)
+                    </dd>
+                    <dt class="col-sm-5">
+                        @Html.DisplayNameFor(model => model.User.FullName)
+                    </dt>
+                    <dd class="col-sm-7">
+                        @Html.DisplayFor(model => model.User.FullName)
+                    </dd>
+                    <dt class="col-sm-5">
+                        @Html.DisplayNameFor(model => model.User.Email)
+                    </dt>
+                    <dd class="col-sm-7">
+                        @Html.DisplayFor(model => model.User.Email)
+                    </dd>
+                </dl>
+                <div class="form-group">
+                    <input asp-for="User.FirstName" type="hidden" class="form-control" />
+                    <input asp-for="User.Id" type="hidden" class="form-control" />
+                    <input asp-for="User.DisplayName" type="hidden" class="form-control" />
+                    <input asp-for="User.LastName" type="hidden" class="form-control" />
+                    <input asp-for="User.Email" type="hidden" class="form-control" />
+                    <input asp-for="User.CreateDateTime" type="hidden" class="form-control" />
+                    <input asp-for="User.ImageLocation" type="hidden" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="User.UserTypeId" class="control-label">User Type</label>
+                    <select asp-for="User.UserTypeId" class="form-control">
+                        @foreach (UserType userType in Model.UserTypes)
+                        {
+                            <option value="@userType.Id">@userType.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="User.UserTypeId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for="User.FullName" type="hidden" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary btn-block" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Cancel</a>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
