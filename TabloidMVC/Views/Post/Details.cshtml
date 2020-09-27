@@ -4,52 +4,7 @@
     ViewData["Title"] = $"Post - {Model.Post.Title}";
 }
 
-<<<<<<< HEAD
-    <div class="container pt-5">
-        <a class="btn btn-primary" asp-action="Index">All Post</a>
-        <a class="btn btn-primary" asp-action="UserPosts">My Post</a>
-        <div class="post">
-            <section class="px-3">
 
-                <div class="row justify-content-between">
-                    <h1 class="text-secondary">@Model.Post.Title</h1>
-                    <h1 class="text-black-50">@Model.Post.Category.Name</h1>
-                </div>
-                <div class="row justify-content-between">
-                    <p class="text-secondary">Written by @Model.Post.UserProfile.FullName</p>
-                    <p class="text-black-50">Published on @Html.DisplayFor(model => model.Post.PublishDateTime)</p>
-                </div>
-                <div class="row justify-content-start">
-                    @{ string minuteForm = Model.ReadTime == 1 ? "minute" : "minutes"; }
-                    <p class="text-secondary">Estimated read time: @Model.ReadTime @minuteForm</p>
-                </div>
-                <div class="row">
-
-                </div>
-            </section>
-            <hr />
-            @if (!string.IsNullOrWhiteSpace(Model.Post.ImageLocation))
-            {
-                <section class="row justify-content-center">
-                    <div>
-                        <img src="@Model.Post.ImageLocation" />
-                    </div>
-                </section>
-            }
-            <section class="row post__content">
-                <p class="col-sm-12 mt-5">@Html.DisplayFor(model => model.Post.Content)</p>
-            </section>
-            <div class="row">
-                <div class="m-1">
-                    <a class="btn btn-primary" asp-controller="Comment" asp-action="Index" asp-route-id="@Model.Post.Id">View Comments</a>
-                </div>
-                <div class="m-1">
-                    <a class="btn btn-primary" asp-controller="Comment" asp-action="Create" asp-route-id="@Model.Post.Id">Add Comment</a>
-                </div>
-
-
-
-=======
 <div class="container pt-5">
     <div class="post">
         <section class="px-3">
@@ -114,7 +69,8 @@
             </div>
             <div class="m-1">
                 <a class="btn btn-primary" asp-controller="Comment" asp-action="Create" asp-route-id="@Model.Post.Id">Add Comment</a>
->>>>>>> master
+
             </div>
         </div>
     </div>
+</div>
