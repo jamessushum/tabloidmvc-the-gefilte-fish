@@ -19,10 +19,11 @@ namespace TabloidMVC.Repositories
                 {
                     cmd.CommandText = @"
                        SELECT u.id, u.FirstName, u.LastName, u.DisplayName, u.Email,
-                              u.CreateDateTime, u.ImageLocation, u.UserTypeId,
+                              u.CreateDateTime, u.ImageLocation, u.UserTypeId, u.Deactivated,
                               ut.[Name] AS UserTypeName
                          FROM UserProfile u
                               LEFT JOIN UserType ut ON u.UserTypeId = ut.id
+                         WHERE u.Deactivated = 0
                          ORDER BY u.DisplayName";
 
                     var reader = cmd.ExecuteReader();
@@ -39,6 +40,7 @@ namespace TabloidMVC.Repositories
                             LastName = reader.GetString(reader.GetOrdinal("LastName")),
                             DisplayName = reader.GetString(reader.GetOrdinal("DisplayName")),
                             CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
+                            Deactivated = reader.GetBoolean(reader.GetOrdinal("Deactivated")),
                             ImageLocation = DbUtils.GetNullableString(reader, "ImageLocation"),
                             UserTypeId = reader.GetInt32(reader.GetOrdinal("UserTypeId")),
                             UserType = new UserType()
@@ -71,7 +73,7 @@ namespace TabloidMVC.Repositories
                               ut.[Name] AS UserTypeName
                          FROM UserProfile u
                               LEFT JOIN UserType ut ON u.UserTypeId = ut.id
-                        WHERE email = @email";
+                        WHERE email = @email AND Deactivated = 0";
                     cmd.Parameters.AddWithValue("@email", email);
 
                     UserProfile userProfile = null;
@@ -86,7 +88,6 @@ namespace TabloidMVC.Repositories
                             FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
                             LastName = reader.GetString(reader.GetOrdinal("LastName")),
                             DisplayName = reader.GetString(reader.GetOrdinal("DisplayName")),
-                            CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
                             ImageLocation = DbUtils.GetNullableString(reader, "ImageLocation"),
                             UserTypeId = reader.GetInt32(reader.GetOrdinal("UserTypeId")),
                             UserType = new UserType()
@@ -100,6 +101,38 @@ namespace TabloidMVC.Repositories
                     reader.Close();
 
                     return userProfile;
+                }
+            }
+        }
+
+        public void Update(UserProfile userProfile)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"UPDATE UserProfile
+                                        SET
+                                        FirstName = @firstName,
+                                        LastName = @lastName,
+                                        DisplayName = @displayName,
+                                        ImageLocation = @imageLocation,
+                                        Email = @email,
+                                        Deactivated = @deactivated,
+                                        UserTypeId = @typeId
+                                        WHERE Id = @id";
+                    cmd.Parameters.AddWithValue("@firstName", userProfile.FirstName);
+                    cmd.Parameters.AddWithValue("@lastName", userProfile.LastName);
+                    cmd.Parameters.AddWithValue("@displayName", userProfile.DisplayName);
+                    cmd.Parameters.AddWithValue("@email", userProfile.Email);
+                    cmd.Parameters.AddWithValue("@ImageLocation", DbUtils.ValueOrDBNull(userProfile.ImageLocation));
+                    cmd.Parameters.AddWithValue("@deactivated", userProfile.Deactivated);
+                    cmd.Parameters.AddWithValue("@typeId", userProfile.UserTypeId);
+                    cmd.Parameters.AddWithValue("@id", userProfile.Id);
+
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
                 }
             }
         }
