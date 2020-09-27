@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TabloidMVC.Models;
+using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 
 namespace TabloidMVC.Controllers
@@ -63,21 +64,36 @@ namespace TabloidMVC.Controllers
         // GET: UserProfileController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            ProfileEditViewModel evm = new ProfileEditViewModel()
+            {
+                User = _userProfileRepository.GetById(id),
+                UserTypes = _userProfileRepository.GetUserTypes()
+            };
+            
+
+            if (evm.User == null)
+            {
+                return NotFound();
+            }
+
+            return View(evm);
         }
 
         // POST: UserProfileController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, ProfileEditViewModel evm)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _userProfileRepository.Update(evm.User);
+
+                return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                evm.UserTypes =_userProfileRepository.GetUserTypes();
+                return View(evm);
             }
         }
 
