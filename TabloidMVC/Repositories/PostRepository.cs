@@ -104,8 +104,7 @@ namespace TabloidMVC.Repositories
                       @"SELECT
                         p.Id as pId,
                         Title, 
-                        Content, 
-                        p.ImageLocation, 
+                        Content,  
                         p.CreateDateTime, 
                         PublishDateTime, 
                         IsApproved, 
@@ -131,7 +130,6 @@ namespace TabloidMVC.Repositories
                                 Id = reader.GetInt32(reader.GetOrdinal("pId")),
                                 Title = reader.GetString(reader.GetOrdinal("Title")),
                                 Content = reader.GetString(reader.GetOrdinal("Content")),
-                                ImageLocation = reader.GetString(reader.GetOrdinal("ImageLocation")),
                                 CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
                                 PublishDateTime = reader.GetDateTime(reader.GetOrdinal("PublishDateTime")),
                                 IsApproved = reader.GetBoolean(reader.GetOrdinal("IsApproved")),
