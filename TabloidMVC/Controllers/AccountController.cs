@@ -56,6 +56,7 @@ namespace TabloidMVC.Controllers
         // GET: AccountController/Create
         public ActionResult Create()
         {
+            ViewBag.DuplicateEmail = false;
             return View();
         }
 
@@ -79,6 +80,7 @@ namespace TabloidMVC.Controllers
                 {
                     if (user.Email == userProfile.Email)
                     {
+                        ViewBag.DuplicateEmail = true;
                         return View();
                     }
                 }
@@ -87,6 +89,7 @@ namespace TabloidMVC.Controllers
                 {
                     if (user.Email == userProfile.Email)
                     {
+                        ViewBag.DuplicateEmail = true;
                         return View();
                     }
                 }
