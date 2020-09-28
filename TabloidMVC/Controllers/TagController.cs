@@ -131,7 +131,7 @@ namespace TabloidMVC.Controllers
 
             AddTagPostViewModel vm = new AddTagPostViewModel
             {
-                Post = _postRepo.GetPublishedPostById(Id),
+                Post = _postRepo.GetPostById(Id),
                 Tags = _tagRepo.GetAllTags(),
                 CurrentTagIds = new List<int>()
             };
@@ -177,6 +177,13 @@ namespace TabloidMVC.Controllers
                         {
                             _tagRepo.RemoveTagFromPost(tagId, id);
                         }
+                    }
+                }
+                else
+                {
+                    foreach (int tagId in previouslySelectedTagIds)
+                    {
+                        _tagRepo.RemoveTagFromPost(tagId, id);
                     }
                 }
 
