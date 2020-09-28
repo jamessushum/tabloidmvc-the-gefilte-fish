@@ -72,6 +72,13 @@ namespace TabloidMVC.Controllers
         {
             try
             {
+                List<UserProfile> allAdmins = _userProfileRepository.GetAllActiveAdmins();
+                if (allAdmins.Count == 1 && evm.User.UserTypeId != 1)
+                {
+                    ModelState.AddModelError(string.Empty, "Assign a new admin before making this one an author");
+                    evm.UserTypes = _userProfileRepository.GetUserTypes();
+                    return View(evm);
+                }                
                 _userProfileRepository.Update(evm.User);
 
                 return RedirectToAction("Index");
@@ -97,6 +104,15 @@ namespace TabloidMVC.Controllers
         {
             try
             {
+                if (userProfile.UserTypeId == 1)
+                {
+                    List<UserProfile> allAdmins = _userProfileRepository.GetAllActiveAdmins();
+                    if (allAdmins.Count == 1)
+                    {
+                        ModelState.AddModelError(string.Empty, "Assign new admin before deleting this one");
+                        return View(userProfile);
+                    }
+                }
                 userProfile.Deactivated = true;
                 _userProfileRepository.Update(userProfile);
                 return RedirectToAction(nameof(Index));

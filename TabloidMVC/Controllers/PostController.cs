@@ -38,9 +38,12 @@ namespace TabloidMVC.Controllers
 
         public IActionResult Details(int id)
         {
+
             var post = _postRepository.GetPostById(id);
             
             if (post == null)return NotFound();
+
+            if (post.UserProfileId != int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)) && (post.PublishDateTime > DateTime.Now || post.PublishDateTime == null) ) return RedirectToAction("Index", "Post");
 
             int WordCount = post.Content.Split(" ").Length;
 
@@ -48,7 +51,8 @@ namespace TabloidMVC.Controllers
             {
                 Post = post,
                 ReadTime = WordCount % 265 == 0 ? WordCount / 265 : WordCount / 265 + 1,
-                PostTags = _tagRepository.GetPostTags(id)
+                PostTags = _tagRepository.GetPostTags(id),
+                CurrentUserProfileId = GetCurrentUserProfileId()
         };            
             return View(pdv);
         }
