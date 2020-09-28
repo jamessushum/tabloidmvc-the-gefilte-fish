@@ -117,6 +117,15 @@ namespace TabloidMVC.Controllers
         {
             try
             {
+                if (userProfile.UserTypeId == 1)
+                {
+                    List<UserProfile> allAdmins = _userProfileRepository.GetAllActiveAdmins();
+                    if (allAdmins.Count == 1)
+                    {
+                        ModelState.AddModelError(string.Empty, "Assign new admin before deleting this one");
+                        return View(userProfile);
+                    }
+                }
                 userProfile.Deactivated = true;
                 _userProfileRepository.Update(userProfile);
                 return RedirectToAction(nameof(Index));
