@@ -35,16 +35,12 @@
                     }
                 </div>
                 <div class="form-group">
-                    <label asp-for="ImageLocation" class="control-label"></label>
-                    <input asp-for="ImageLocation" class="form-control" />
-                    <span asp-validation-for="ImageLocation" class="text-danger"></span>
-                </div>
-                <div class="form-group">
                     <input asp-for="FullName" type="hidden" class="form-control" />
                     <input asp-for="CreateDateTime" type="hidden" class="form-control" />
                     <input asp-for="UserTypeId" type="hidden" class="form-control" />
                     <input asp-for="Id" type="hidden" class="form-control" />
                     <input class="form-check-input" type="hidden" asp-for="Deactivated" />
+                    <input asp-for="ImageLocation" type="hidden" class="form-control" />
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Create" class="btn btn-primary" />
