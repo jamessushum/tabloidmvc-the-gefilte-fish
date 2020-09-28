@@ -179,6 +179,13 @@ namespace TabloidMVC.Controllers
                         }
                     }
                 }
+                else
+                {
+                    foreach (int tagId in previouslySelectedTagIds)
+                    {
+                        _tagRepo.RemoveTagFromPost(tagId, id);
+                    }
+                }
 
                 return RedirectToAction("Details", "Post", new { id = id });
             }
