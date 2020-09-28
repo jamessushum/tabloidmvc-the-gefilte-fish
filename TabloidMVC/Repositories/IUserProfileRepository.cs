@@ -5,9 +5,11 @@ namespace TabloidMVC.Repositories
 {
     public interface IUserProfileRepository
     {
-        List<UserProfile> GetAll();
+        List<UserProfile> GetAllActive();
+        List<UserProfile> GetDeactivated();
 
         UserProfile GetByEmail(string email);
+        void Create(UserProfile userProfile);
         UserProfile GetById(int id);
         List<UserType> GetUserTypes();
         void Update(UserProfile userProfile);
