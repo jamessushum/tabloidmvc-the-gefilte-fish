@@ -21,14 +21,17 @@
                 <p class="text-secondary">Estimated read time: @Model.ReadTime @minuteForm</p>
             </div>
             <div class="row">
-                <a asp-action="Edit" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="Edit">
-                    <i class="fas fa-pencil-alt"></i>
-                </a>
+                @if (Model.Post.UserProfileId == Model.CurrentUserProfileId)
+                {
+                    <a asp-action="Edit" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="Edit">
+                        <i class="fas fa-pencil-alt"></i>
+                    </a>
+                    <a asp-controller="Tag" asp-action="TagManager" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="Tag Manager">
+                        <i class="fa fa-tags"></i>
+                    </a>
+                }
                 <a asp-action="Delete" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="Delete">
                     <i class="fas fa-trash"></i>
-                </a>
-                <a asp-controller="Tag" asp-action="TagManager" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="Tag Manager">
-                    <i class="fa fa-tags"></i>
                 </a>
             </div>
         </section>
