@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using TabloidMVC.Models;
@@ -50,6 +53,69 @@ namespace TabloidMVC.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        // GET: AccountController/Create
+        public ActionResult Create()
+        {
+            ViewBag.DuplicateEmail = false;
+            return View();
+        }
+
+        // POST: AccountController/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(UserProfile userProfile)
+        {
+            try
+            {
+                //getting userTypes so that usertypeId isn't hard coded
+                List<UserType> userTypes = _userProfileRepository.GetUserTypes();
+                UserType author = userTypes.First(type => type.Name == "Author");
+
+                //getting all users for simple email verification
+                List<UserProfile> allActiveUsers = _userProfileRepository.GetAllActive();
+                List<UserProfile> deactivatedUsers = _userProfileRepository.GetDeactivated();
+
+                // checks active users
+                foreach (UserProfile user in allActiveUsers)
+                {
+                    if (user.Email == userProfile.Email)
+                    {
+                        ViewBag.DuplicateEmail = true;
+                        return View();
+                    }
+                }
+                // checks deactivated users
+                foreach (UserProfile user in deactivatedUsers)
+                {
+                    if (user.Email == userProfile.Email)
+                    {
+                        ViewBag.DuplicateEmail = true;
+                        return View();
+                    }
+                }
+
+                userProfile.CreateDateTime = DateTime.Now;
+                userProfile.UserTypeId = author.Id;
+                userProfile.Deactivated = false;
+
+                _userProfileRepository.Create(userProfile);
+
+                //Create new credentials for login
+                Credentials credentials = new Credentials
+                {
+                    Email = userProfile.Email
+                };
+
+                Login(credentials);
+
+                return RedirectToAction("Index", "Home"); 
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception:", ex);
+                return View();
+            }
+        }
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();

@@ -18,7 +18,11 @@ namespace TabloidMVC.Controllers
     {
         private readonly IPostRepository _postRepository;
         private readonly ICategoryRepository _categoryRepository;
+
+        private readonly IUserProfileRepository _urseRepository;
+
         private readonly ITagRepository _tagRepository;
+
 
         public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ITagRepository tagRepository)
         {
@@ -96,7 +100,7 @@ namespace TabloidMVC.Controllers
                 throw new Exception(ex.Message);
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("UserPosts");
         }
         private int GetCurrentUserProfileId()
         {
@@ -105,6 +109,7 @@ namespace TabloidMVC.Controllers
         }
         public IActionResult Edit(int id)
         {
+        
             PostCreateViewModel vm = new PostCreateViewModel()
             {
                 Post = _postRepository.GetPostById(id),
@@ -117,21 +122,33 @@ namespace TabloidMVC.Controllers
         [HttpPost]
         public IActionResult Edit(int id, Post post)
         {
-            Console.WriteLine("Hitting Edit P2");
-            post.Print();
+            
             PostCreateViewModel vm = new PostCreateViewModel()
             {
-                Post = _postRepository.GetPostById(id),
+                Post = post,
                 CategoryOptions = _categoryRepository.GetAll()
             };
             try
             {
                 _postRepository.EditPost(post);
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", new { id = post.Id });
             }
             catch(Exception ex)
             {
                 return View(vm);
+            }
+        }
+        public IActionResult UserPosts(int id)
+        {
+            try
+            {
+                List<Post> posts = _postRepository.GetUserPosts(GetCurrentUserProfileId());
+                ViewBag.Length = posts.Count;
+                return View(posts);
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return RedirectToAction("Index");
             }
         }
     }
