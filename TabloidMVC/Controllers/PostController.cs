@@ -39,9 +39,12 @@ namespace TabloidMVC.Controllers
 
         public IActionResult Details(int id)
         {
+
             var post = _postRepository.GetPostById(id);
             
             if (post == null)return NotFound();
+
+            if (post.UserProfileId != int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier))) return RedirectToAction("Index", "Post");
 
             int WordCount = post.Content.Split(" ").Length;
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.Language;
@@ -12,10 +13,11 @@ using TabloidMVC.Repositories;
 
 namespace TabloidMVC.Controllers
 {
+    [Authorize]
     public class TagController : Controller
     {
         private readonly ITagRepository _tagRepo;
-        private readonly IPostRepository _postRepo;
+        private readonly IPostRepository _postRepo;        
         public TagController(ITagRepository tagRepository, IPostRepository postRepository)
         {
             _tagRepo = tagRepository;
