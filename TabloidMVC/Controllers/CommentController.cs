@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
@@ -29,7 +31,19 @@ namespace TabloidMVC.Controllers
         {
             Post post = _postRepository.GetPostById(Id);
 
+            // Added after demo: Kicks 404 when user tries to enter invalid post id in url
+            if (post == null)
+            {
+                return NotFound();
+            }
+
             List<Comment> comments = _commentRepository.GetCommentsByPost(Id);
+
+            // Added after demo: Kicks 404 when user tries to enter invalid post id in url
+            if (comments == null)
+            {
+                return NotFound();
+            }
 
             PostCommentViewModel vm = new PostCommentViewModel()
             {
@@ -83,6 +97,12 @@ namespace TabloidMVC.Controllers
 
             Comment comment = _commentRepository.GetCommentById(id);
 
+            // Added after demo: kicks 404 when user tries to enter invalid comment id in url to edit 
+            if (comment == null)
+            {
+                return NotFound();
+            }
+
             if (comment.UserProfileId != currentUserProfileId)
             {
                 return NotFound();
@@ -114,6 +134,12 @@ namespace TabloidMVC.Controllers
             int currentUserProfileId = GetCurrentUserProfileId();
 
             Comment comment = _commentRepository.GetCommentById(id);
+
+            // Added after demo: kicks 404 when user tries to enter invalid comment id in url to delete 
+            if (comment == null)
+            {
+                return NotFound();
+            }
 
             if (comment.UserProfileId != currentUserProfileId)
             {
