@@ -19,7 +19,6 @@ namespace TabloidMVC.Controllers
         private readonly IPostRepository _postRepository;
         private readonly ICategoryRepository _categoryRepository;
 
-        private readonly IUserProfileRepository _urseRepository;
 
         private readonly ITagRepository _tagRepository;
 
@@ -150,6 +149,14 @@ namespace TabloidMVC.Controllers
                 Console.WriteLine(ex.Message);
                 return RedirectToAction("Index");
             }
+        }
+        public IActionResult Publish(int id)
+        {
+            Post post = _postRepository.GetPostById(id);
+            post.PublishDateTime = null;
+            _postRepository.EditPost(post);
+
+            return RedirectToAction("UserPosts");
         }
     }
 }

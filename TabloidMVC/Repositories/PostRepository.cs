@@ -141,6 +141,7 @@ namespace TabloidMVC.Repositories
 
             return posts;
         }
+
         public Post GetPublishedPostById(int id)
         {
             using (var conn = Connection)
