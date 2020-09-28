@@ -42,7 +42,7 @@
                 </dd>
             </dl>
             <div class="form-group">
-                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="submit" value="Deactivate" class="btn btn-danger btn-block" />
                 <a class="btn btn-primary btn-block" asp-controller="UserProfile" asp-action="Index">Cancel</a>
             </div>
